@@ -48,3 +48,5 @@ Thumbs.db
 *.mov
 *.wmv
 
+# UAE emulator files
+*.uaem
