@@ -301,14 +301,14 @@ Copper:
 
 ; Palette
 Palette:
-	dc.w	$0180,$0001,$0182,$0035,$0184,$0046,$0186,$0467
-	dc.w	$0188,$0068,$018a,$0578,$018c,$018a,$018e,$01ac
-	dc.w	$0190,$02df,$0192,$068a,$0194,$06ac,$0196,$05ef
-	dc.w	$0198,$08ab,$019a,$09bc,$019c,$0ade,$019e,$0dff
-	dc.w	$01a0,$0d00,$01a2,$0800,$01a4,$0e80,$01a6,$0ff0
-	dc.w	$01a8,$0990,$01aa,$0444,$01ac,$0555,$01ae,$0666
-	dc.w	$01b0,$0777,$01b2,$0070,$01b4,$0090,$01b6,$00d0
-	dc.w	$01b8,$0333,$01ba,$0777,$01bc,$0bbb,$01be,$0fff
+	dc.w	$0180,$0000,$0182,$0aaa,$0184,$0e00,$0186,$0a00
+	dc.w	$0188,$0d80,$018a,$0fe0,$018c,$08f0,$018e,$0080
+	dc.w	$0190,$00b6,$0192,$00dd,$0194,$00af,$0196,$007c
+	dc.w	$0198,$000f,$019a,$070f,$019c,$0c0e,$019e,$0c08
+	dc.w	$01a0,$0620,$01a2,$0e52,$01a4,$0a52,$01a6,$0005
+	dc.w	$01a8,$0038,$01aa,$007b,$01ac,$00dd,$01ae,$0333
+	dc.w	$01b0,$0888,$01b2,$0ddd,$01b4,$0e52,$01b6,$0a30
+	dc.w	$01b8,$0620,$01ba,$0080,$01bc,$03c0,$01be,$08f0
 
 ; dff120    SPR0PTH     Sprite 0 pointer, 5 bit alti
 ; dff122    SPR0PTL     Sprite 0 pointer, 15 bit bassi
@@ -356,14 +356,10 @@ Bplpointers:
 
 
 PaletteRaw:
-    dc.w	$0001,$0035,$0046,$0467
-	dc.w	$0068,$0578,$018a,$01ac
-	dc.w	$02df,$068a,$06ac,$05ef
-	dc.w	$08ab,$09bc,$0ade,$0dff
-	dc.w	$0d00,$0800,$0e80,$0ff0
-	dc.w	$0990,$0444,$0555,$0666
-	dc.w	$0777,$0070,$0090,$00d0
-	dc.w	$0333,$0777,$0bbb,$0fff
+	dc.w	$0000,$0aaa,$0e00,$0a00,$0d80,$0fe0,$08f0,$0080,$00b6,$00dd
+	dc.w	$00af,$007c,$000f,$070f,$0c0e,$0c08,$0620,$0e52,$0a52,$0005
+	dc.w	$0038,$007b,$00dd,$0333,$0888,$0ddd,$0e52,$0a30,$0620,$0080
+	dc.w	$03c0,$08f0
 
 FadeInFrame:
     dc.w    0
@@ -379,7 +375,7 @@ draw_buffer:
 	dc.l	Bitplanes2	; buffer di disegno
 
 Background:
-;    incbin "gfx/Back.raw"
+    incbin "gfx/Background.raw"
 
 Digits:
     incbin "gfx/Digits.raw"
