@@ -33,6 +33,7 @@
     include "music/P61.conf"
     include "functions/init.s"
 
+background_margin = 4       ; Margine in byte, sia sinistro che destro
 
 ; ===== INIZIO CODICE 
 
@@ -295,10 +296,12 @@ Copper:
     dc.w $92,$38        ; Display data fetch start http://amiga-dev.wikidot.com/hardware:ddfstrt
     dc.w $94,$d0        ; Display data fetch stop
 
-    dc.w    $108,8+(48*4)          ; BPLxMOD: http://amiga-dev.wikidot.com/hardware:bplxmod  - Modulo interleaved
-    dc.w    $10a,8+(48*4)
+next_line_offset = background_margin*2
 
+    dc.w    $108,next_line_offset+((40+next_line_offset)*4)          ; BPLxMOD: http://amiga-dev.wikidot.com/hardware:bplxmod  - Modulo interleaved
+    dc.w    $10a,next_line_offset+((40+next_line_offset)*4)
 
+    
 ; Palette
 Palette:
 	dc.w	$0180,$0000,$0182,$0aaa,$0184,$0e00,$0186,$0a00
@@ -364,11 +367,11 @@ PaletteRaw:
 FadeInFrame:
     dc.w    0
 
-; TODO parametrizzare i margini
 Bitplanes1:
-    dcb.b   (48*256)*5,0
+    dcb.b   ((40+(background_margin*2))*256)*5,0
+
 Bitplanes2:
-    dcb.b   (48*256)*5,0
+    dcb.b   ((40+(background_margin*2))*256)*5,0
 
 view_buffer:
 	dc.l	Bitplanes1+4	; buffer visualizzato

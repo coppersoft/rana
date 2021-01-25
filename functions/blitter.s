@@ -167,8 +167,7 @@ SimpleBlit:
     move.l  a0,$dff050    ; Setto la sorgente su BLTAPTH
     move.l  a1,$dff054    ; Setto la destinazione su BLTDPTH
     move.w  #0,$dff064    ; Modulo zero per la sorgente BLTAMOD
-;   TODO: parametrizzare i margini
-    move.w  #8,$dff066    ; Setto il modulo per il canale D di destiazione BLTDMOD
+    move.w  #background_margin*2,$dff066    ; Setto il modulo per il canale D di destiazione BLTDMOD
     
     mulu.w  d1,d0         ; Moltiplico il numero di righe da copiare per i bitplane
     lsl.w   #6,d0
@@ -200,14 +199,14 @@ CopiaSfondo:
 
     lea     Background+(200*40*5),a0
     move.l  draw_buffer,a1
-    add.l   #200*48*5,a1
+    add.l   #200*(40+(background_margin*2))*5,a1
     move.w  #55,d0
     move.w  #5,d1
     bsr.w   SimpleBlit
     
     lea     Background+(200*40*5),a0
     move.l  view_buffer,a1
-    add.l   #200*48*5,a1
+    add.l   #200*(40+(background_margin*2))*5,a1
     move.w  #55,d0
     move.w  #5,d1
     bsr.w   SimpleBlit
