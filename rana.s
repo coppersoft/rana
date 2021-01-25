@@ -107,6 +107,14 @@ START:
 
     move.l  #Copper,$dff080     ; http://amiga-dev.wikidot.com/hardware:cop1lch  (Copper pointer register) E' un long word move perché il registro è una long word
 
+    ; Configurazione collisioni sprite
+    ; CLXCON: http://amiga-dev.wikidot.com/hardware:clxcon
+
+;    move.w  #%0000010000011111,$dff098     ; OK
+    move.w  #%0000010000010000,$dff098
+
+
+
 ; PRESENTAZIONE INIZIALE
 
 ;    lea     Presentazione,a0
@@ -213,8 +221,22 @@ mainloop:
     move.w  #12,d2
     bsr.w   PointSprite
 
-
 ; Fine prova movimento
+
+; Inizio test collisioni
+
+    
+    move.w  $dff00e,d3
+    btst.l  #4,d3
+    beq.s   .nocoll
+
+    move.w  #$0fff,$dff180
+
+.nocoll
+
+
+; Fine test collisioni
+
 
 
 
