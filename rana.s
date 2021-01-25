@@ -94,12 +94,14 @@ START:
 
     ; Setto lo spritepointer (dff120) nello stesso modo fatto per i bitplane
 
-;    lea     ShipBulletSpritePointer,a0
-;    move.l  #ShipBulletSprite,d0
+    lea     RanaSpritePointer,a0
+    move.l  #RanaSprite,d0
 
-;    move.w  d0,6(a0)
-;    swap    d0
-;    move.w  d0,2(a0)
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)
+
+
 
     ; Setto la copperlist
 
@@ -197,7 +199,22 @@ mainloop:
     bsr.w   SwitchBuffers
     bsr.w   wframe
 
+; Inizio prova movimento
 
+    bsr.w   UpdateRanaPosition
+    
+; a1    Indirizzo dello sprite
+; d0    Posizione verticale
+; d1    Posizione orizzontale
+; d2    Altezza
+    lea     RanaSprite,a1
+    move.w  RanaY,d0
+    move.w  RanaX,d1
+    move.w  #12,d2
+    bsr.w   PointSprite
+
+
+; Fine prova movimento
 
 
 
@@ -221,7 +238,43 @@ mainloop:
 
 ; *************** INIZIO ROUTINE UTILITY
 
+UpdateRanaPosition:
+    move.w  $dff00c,d3
+    btst.l  #1,d3       ; Bit 1 (destra) è azzerato?
+    beq.s   .nodestra   ; Se si salto lo spostamento a destra
 
+; Spostamento a destra
+;    cmpi.w  #320-16,ShipBobX
+;    beq.s   .exit
+    
+    addq.w   #1,RanaX
+    rts
+.nodestra
+    btst.l  #9,d3       ; Il bit 9 (sinistra) è azzerato?
+    beq.s   .checkvert  ; Se si passo al controllo verticale
+
+;    tst.w   ShipBobX
+;    beq.s   .exit
+
+    subq.w  #1,RanaX
+    rts                 ; Devo evitare movimenti diagonali, quindi esco subito
+.checkvert
+    ; Devo fare l'xor tra i bit 9 e 8 (su) e i bit 1 e 0 (giù), quindi
+    move.w  d3,d2       ; Mi copio il registro in d2
+    lsr.w   #1,d2       ; Sposto i bit a destra
+    eor.w   d2,d3       ; Faccio l' XOR
+
+    btst.l  #8,d3       ; Sta andando su?
+    beq.s   .nosu       ; (bit azzerato)
+
+    subi.w  #1,RanaY   
+    rts
+.nosu
+    btst.l  #0,d3       ; Sta andando giù?
+    beq.s   .exit       ; Se no esce
+    addi.w  #1,RanaY
+.exit
+    rts
 
 
 ; ---------------------------
@@ -332,6 +385,7 @@ Palette:
 	dc.w $132,0
 	dc.w $134,0     ;5
 	dc.w $136,0
+RanaSpritePointer:
 	dc.w $138,0     ;6
 	dc.w $13a,0
 	dc.w $13c,0     ;7
@@ -379,8 +433,8 @@ draw_buffer:
 	dc.l	Bitplanes2+4	; buffer di disegno
 
 Background:
-    incbin "gfx/Background.raw"
-;    incbin  "gfx/Colors.raw"
+;    incbin "gfx/Background.raw"
+    incbin  "gfx/Colors.raw"
 
 Digits:
     incbin "gfx/Digits.raw"
@@ -399,7 +453,10 @@ Score:
 ScoreStr:
     dcb.b   6,0
 
-
+RanaX:
+    dc.w    50
+RanaY:
+    dc.w    50
 
 
 
@@ -410,16 +467,21 @@ Lifes:
 
 ; SPRITES:
 
-ShipBulletSprite:
+RanaSprite:
 	dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
 
-	dc.w	$6000,$6000
-	dc.w	$f000,$f000
-	dc.w	$9000,$f000
-	dc.w	$0000,$f000
-	dc.w	$0000,$6000
-	dc.w	$6000,$0000
-	dc.w	$6000,$0000
+	dc.w	$e01c,$0000
+	dc.w	$e79c,$0000
+	dc.w	$c84c,$0780
+	dc.w	$d4ac,$0fc0
+	dc.w	$e01c,$1fe0
+	dc.w	$6018,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$6018,$1fe0
+	dc.w	$7038,$0fc0
+	dc.w	$e79c,$0000
+	dc.w	$e01c,$0000
+	dc.w	$6018,$0000
 
 	dc.w 0,0
 
