@@ -48,6 +48,9 @@ Thumbs.db
 *.mov
 *.wmv
 
+# Amiga files
+*.info
+
 # UAE emulator files
 *.uaem
 

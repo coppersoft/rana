@@ -295,8 +295,8 @@ Copper:
     dc.w $92,$38        ; Display data fetch start http://amiga-dev.wikidot.com/hardware:ddfstrt
     dc.w $94,$d0        ; Display data fetch stop
 
-    dc.w    $108,4+(44*4)          ; BPLxMOD: http://amiga-dev.wikidot.com/hardware:bplxmod  - Modulo interleaved
-    dc.w    $10a,4+(44*4)
+    dc.w    $108,8+(48*4)          ; BPLxMOD: http://amiga-dev.wikidot.com/hardware:bplxmod  - Modulo interleaved
+    dc.w    $10a,8+(48*4)
 
 
 ; Palette
@@ -364,18 +364,20 @@ PaletteRaw:
 FadeInFrame:
     dc.w    0
 
+; TODO parametrizzare i margini
 Bitplanes1:
-    dcb.b   (44*256)*5,0
+    dcb.b   (48*256)*5,0
 Bitplanes2:
-    dcb.b   (44*256)*5,0
+    dcb.b   (48*256)*5,0
 
 view_buffer:
-	dc.l	Bitplanes1	; buffer visualizzato
+	dc.l	Bitplanes1+4	; buffer visualizzato
 draw_buffer:
-	dc.l	Bitplanes2	; buffer di disegno
+	dc.l	Bitplanes2+4	; buffer di disegno
 
 Background:
     incbin "gfx/Background.raw"
+;    incbin  "gfx/Colors.raw"
 
 Digits:
     incbin "gfx/Digits.raw"
