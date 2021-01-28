@@ -510,7 +510,8 @@ Lifes:
 
 ; SPRITES:
 
-RanaSprite:
+; 16x12
+RanaSpriteUpIdle:
 	dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
 
 	dc.w	$e01c,$0000
