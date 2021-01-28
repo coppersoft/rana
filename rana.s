@@ -181,28 +181,12 @@ InitLevel:
 
 ;    bsr.w   DrawScore
 
-; INIZIO PROVA AUDIO
-
-    
-    lea     Cra,a0
-    move.l  a0,$dff0d0      ; Sample in AUD3LC
-    move.w  #3000,$dff0d4  ; Lunghezza in word in AUD3LEN
-    move.w  #300,$dff0d6    ; Periodo in AUD3PER
-    move.w  #64,$dff0d8     ; Volume massimo in AUD3VOL
-    move.w  #%1000000000001000,$dff096      ; DMA audio 2 attivo in DMACON
-
-    bsr.w   wframe
-
-    lea     Silent,a0
-    move.l  a0,$dff0d0
-    move.w  #100,$dff0d4  ; Lunghezza in word in AUD2LEN
-; FINE PROVA AUDIO
-
-
 
 ; GAME LOOP
 
     move.l  #0,d0
+
+
 
 mainloop:
 
@@ -220,11 +204,19 @@ mainloop:
 
 .nofadein:
 
-
+    bsr.w   CheckSoundStop
 
 
     bsr.w   SwitchBuffers
-    bsr.w   wframe
+    
+    btst    #7,$bfe001
+    bne.s   .exit_cf
+
+    bsr.w   PlayCra
+
+.exit_cf
+
+
 
 ; Inizio prova movimento
 
@@ -260,8 +252,10 @@ mainloop:
 
 
 
+    bsr.w   wframe
     btst    #6,$bfe001
     bne     mainloop
+
 
 ;    bsr.w   P61_End
 
@@ -275,6 +269,7 @@ mainloop:
     include "functions/blitter.s"
     include "functions/sprite.s"
     include "functions/utils.s"
+    include "functions/audio.s"
     include "music/P6112-Play.s"
 
 ; *************** INIZIO ROUTINE UTILITY
@@ -316,7 +311,6 @@ UpdateRanaPosition:
     addi.w  #1,RanaY
 .exit
     rts
-
 
 ; ---------------------------
 ;
@@ -499,13 +493,17 @@ RanaX:
 RanaY:
     dc.w    50
 
-; AUDIO
+; AUDIO STUFF
 
 Cra:
 ;    incbin  "sfx/cra.raw"
     incbin  "sfx/cra_11025.raw"
 Silent:
     dcb.w   100
+SoundStarted:
+    dc.w    0
+
+
 Lifes:
     dc.w    3
 
