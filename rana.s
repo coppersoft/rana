@@ -529,3 +529,149 @@ RanaSpriteUpIdle:
 
 	dc.w 0,0
 
+; 16x15
+RanaSpriteUpJumping:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$e01c,$0000
+	dc.w	$e01c,$0000
+	dc.w	$c78c,$0000
+	dc.w	$c84c,$0780
+	dc.w	$d4ac,$0fc0
+	dc.w	$e01c,$1fe0
+	dc.w	$6018,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$7038,$0fc0
+	dc.w	$77b8,$0000
+	dc.w	$e01c,$0000
+	dc.w	$e01c,$0000
+	dc.w	$6018,$0000
+
+    dc.w 0,0
+
+; 16x12
+RanaSpriteDownIdle:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$6018,$0000
+	dc.w	$e01c,$0000
+	dc.w	$e79c,$0000
+	dc.w	$7038,$0fc0
+	dc.w	$6018,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$6018,$1fe0
+	dc.w	$e01c,$1fe0
+	dc.w	$d4ac,$0fc0
+	dc.w	$c84c,$0780
+	dc.w	$e79c,$0000
+	dc.w	$e01c,$0000
+
+    dc.w 0,0
+
+; 16x15
+RanaSpriteDownJumping:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$6018,$0000
+	dc.w	$e01c,$0000
+	dc.w	$e01c,$0000
+	dc.w	$77b8,$0000
+	dc.w	$7038,$0fc0
+	dc.w	$2010,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$6018,$1fe0
+	dc.w	$e01c,$1fe0
+	dc.w	$d4ac,$0fc0
+	dc.w	$c84c,$0780
+	dc.w	$c78c,$0000
+	dc.w	$e01c,$0000
+	dc.w	$e01c,$0000
+
+    dc.w 0,0
+
+; 16x14
+RanaSpriteLeftIdle:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$f860,$0000
+	dc.w	$fdf0,$0000
+	dc.w	$cff0,$0000
+	dc.w	$1080,$0f00
+	dc.w	$2000,$1f80
+	dc.w	$5040,$3f80
+	dc.w	$4040,$3f80
+	dc.w	$4040,$3f80
+	dc.w	$5040,$3f80
+	dc.w	$2000,$1f80
+	dc.w	$1080,$0f00
+	dc.w	$cff0,$0000
+	dc.w	$fdf0,$0000
+	dc.w	$f860,$0000
+
+    dc.w 0,0
+
+; 16x14
+RanaSpriteLeftJumping:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$fc0c,$0000
+	dc.w	$fe3e,$0000
+	dc.w	$c7fe,$0000
+	dc.w	$0830,$07c0
+	dc.w	$1000,$0fe0
+	dc.w	$2810,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$2010,$1fe0
+	dc.w	$2810,$1fe0
+	dc.w	$1000,$0fe0
+	dc.w	$0830,$07c0
+	dc.w	$c7fe,$0000
+	dc.w	$fe3e,$0000
+	dc.w	$fc0c,$0000
+
+    dc.w 0,0
+
+; 16x14
+RanaSpriteRightIdle:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$61f0,$0000
+	dc.w	$fbf0,$0000
+	dc.w	$ff30,$0000
+	dc.w	$1080,$0f00
+	dc.w	$0040,$1f80
+	dc.w	$20a0,$1fc0
+	dc.w	$2020,$1fc0
+	dc.w	$2020,$1fc0
+	dc.w	$20a0,$1fc0
+	dc.w	$0040,$1f80
+	dc.w	$1080,$0f00
+	dc.w	$ff30,$0000
+	dc.w	$fbf0,$0000
+	dc.w	$61f0,$0000
+
+    dc.w 0,0
+
+; 16x14
+RanaSpriteRightJumping:
+    dc.w    $0,$0	;Vstart.b,Hstart/2.b,Vstop.b,%A0000SEH
+
+	dc.w	$607e,$0000
+	dc.w	$f8fe,$0000
+	dc.w	$ffc6,$0000
+	dc.w	$1820,$07c0
+	dc.w	$0010,$0fe0
+	dc.w	$1028,$0ff0
+	dc.w	$1008,$0ff0
+	dc.w	$1008,$0ff0
+	dc.w	$1028,$0ff0
+	dc.w	$0010,$0fe0
+	dc.w	$1820,$07c0
+	dc.w	$ffc6,$0000
+	dc.w	$f8fe,$0000
+	dc.w	$607e,$0000
+
+    dc.w 0,0
