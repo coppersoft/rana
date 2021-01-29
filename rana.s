@@ -95,7 +95,7 @@ START:
     ; Setto lo spritepointer (dff120) nello stesso modo fatto per i bitplane
 
     lea     RanaSpritePointer,a0
-    move.l  #RanaSprite,d0
+    move.l  #RanaSpriteUpIdle,d0
 
     move.w  d0,6(a0)
     swap    d0
@@ -226,7 +226,7 @@ mainloop:
 ; d0    Posizione verticale
 ; d1    Posizione orizzontale
 ; d2    Altezza
-    lea     RanaSprite,a1
+    lea     RanaSpriteUpIdle,a1
     move.w  RanaY,d0
     move.w  RanaX,d1
     move.w  #12,d2
