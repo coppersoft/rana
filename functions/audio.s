@@ -2,7 +2,7 @@ PlayCra:
 
     ; Eventualmente, se si vuole fermare un suono prima che abbia finito fermare
     ; il DMA del canale
-;    move.w  #%0000000000001000,$dff096      ; DMA audio 3 inattivo in DMACON
+    move.w  #%0000000000001000,$dff096      ; DMA audio 3 inattivo in DMACON
 
     lea     Cra,a0
     move.l  a0,$dff0d0      ; Sample in AUD3LC

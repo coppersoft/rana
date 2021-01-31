@@ -35,6 +35,9 @@
 
 background_margin = 4       ; Margine in byte, sia sinistro che destro
 
+ranaX_start = 152
+ranaY_start	= 240
+
 ; ===== INIZIO CODICE 
 
 START:
@@ -164,6 +167,9 @@ RestartGame:
 
 InitLevel:
 
+	move.w	#ranaX_start,RanaX
+	move.w	#ranaY_start,RanaY
+
 ; Stabilisco il livello di difficoltà
 
 ; TODO
@@ -266,6 +272,9 @@ CheckInput:
 
     move.w	#3,RanaOrientation	; Destra
 	move.w	#1,RanaState
+
+	bsr.w	PlayCra
+
     rts
 .nodestra
     btst.l  #9,d3       ; Il bit 9 (sinistra) è azzerato?
@@ -273,6 +282,8 @@ CheckInput:
 
 	move.w	#2,RanaOrientation	; Sinistra
 	move.w	#1,RanaState
+
+	bsr.w	PlayCra
 
     rts                 ; Devo evitare movimenti diagonali, quindi esco subito
 .checkvert
@@ -287,6 +298,8 @@ CheckInput:
     move.w	#0,RanaOrientation	; Su
 	move.w	#1,RanaState
 
+	bsr.w	PlayCra
+
     rts
 .nosu
     btst.l  #0,d3       ; Sta andando giù?
@@ -294,6 +307,8 @@ CheckInput:
  
 	move.w	#1,RanaOrientation	; Su
 	move.w	#1,RanaState
+
+	bsr.w	PlayCra
 
 .exit
     rts
@@ -515,8 +530,8 @@ Bplpointers:
 
 
 PaletteRaw:
-	dc.w	$0000,$0aaa,$0e00,$0a00,$0d80,$0fe0,$08f0,$0080,$00b6,$00dd
-	dc.w	$00af,$007c,$000f,$070f,$0c0e,$0c08,$0620,$0e52,$0a52,$0005
+	dc.w	$0000,$0ccc,$0999,$0666,$0222,$00e0,$00b0,$0070,$00d3,$00dd
+	dc.w	$008c,$003b,$0009,$070f,$0c0e,$0c08,$0620,$0e52,$0a52,$0005
 	dc.w	$0038,$007b,$00dd,$0333,$0888,$0ddd,$0e52,$0a30,$0620,$0080
 	dc.w	$03c0,$08f0
 
@@ -535,8 +550,8 @@ draw_buffer:
 	dc.l	Bitplanes2+4	; buffer di disegno
 
 Background:
-;    incbin "gfx/Background.raw"
-    incbin  "gfx/Colors.raw"
+    incbin "gfx/Background.raw"
+;    incbin  "gfx/Colors.raw"
 
 Digits:
     incbin "gfx/Digits.raw"
