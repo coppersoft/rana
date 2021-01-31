@@ -92,14 +92,8 @@ START:
 	move.l	#INTERRUPT,$6c(a4)	; Punto il mio interrupt
 
 
-    ; Setto lo spritepointer (dff120) nello stesso modo fatto per i bitplane
+ 
 
-    lea     RanaSpritePointer,a0
-    move.l  #RanaSpriteUpIdle,d0
-
-    move.w  d0,6(a0)
-    swap    d0
-    move.w  d0,2(a0)
 
 
 
@@ -351,15 +345,38 @@ UpdateRanaPosition:
 
 
 DrawRana:
-; a1    Indirizzo dello sprite
-; d0    Posizione verticale
-; d1    Posizione orizzontale
-; d2    Altezza
-    lea     RanaSpriteUpIdle,a1
+
+
+	tst.w	RanaState
+	beq.s	.idle
+	lea		RanaJumpingFrames,a0
+	lea		RanaJumpingSpriteHeights,a2
+	bra.s	.draw
+.idle
+	lea		RanaIdleFrames,a0
+	lea		RanaIdleSpriteHeights,a2
+.draw
+	move.l	#0,d0
+	move.w	RanaOrientation,d0
+	lsl.w	#1,d0
+	add.l	d0,a2			; Offset per la lista altezze
+	lsl.w	#1,d0
+	add.l	d0,a0			; Offset per la lista frame
+
+	move.l	(a0),a1			; Recupero l'indirizzo dello sprite che mi interessa
+
+    lea     RanaSpritePointer,a0
+    move.l  a1,d0
+
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
+
+	move.l	#0,d0
     move.w  RanaY,d0
     move.w  RanaX,d1
-    move.w  #12,d2
-    bsr.w   PointSprite
+    move.w  (a2),d2
+    bsr.w   PointSprite		; Lo posiziono
 	rts
 
 ; ---------------------------
@@ -740,3 +757,12 @@ RanaSpriteRightJumping:
 	dc.w	$607e,$0000
 
     dc.w 0,0
+
+RanaIdleFrames:
+	dc.l	RanaSpriteUpIdle,RanaSpriteDownIdle,RanaSpriteLeftIdle,RanaSpriteRightIdle
+RanaJumpingFrames:
+	dc.l	RanaSpriteUpJumping,RanaSpriteDownJumping,RanaSpriteLeftJumping,RanaSpriteRightJumping
+RanaIdleSpriteHeights:
+	dc.w	12,12,14,14
+RanaJumpingSpriteHeights:
+	dc.w	15,15,14,14
