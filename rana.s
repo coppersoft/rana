@@ -206,37 +206,29 @@ mainloop:
 
     bsr.w   CheckSoundStop
 
-
     bsr.w   SwitchBuffers
-    
-    btst    #7,$bfe001
-    bne.s   .exit_cf
 
-    bsr.w   PlayCra
+; Prova suono con fire    ELIMINARE
+;    btst    #7,$bfe001
+;    bne.s   .exit_cf
 
+;    bsr.w   PlayCra
 .exit_cf
+; Fine Prova suono con fire
 
 
 
 ; Inizio prova movimento
 
-    bsr.w   UpdateRanaPosition
-    
-; a1    Indirizzo dello sprite
-; d0    Posizione verticale
-; d1    Posizione orizzontale
-; d2    Altezza
-    lea     RanaSpriteUpIdle,a1
-    move.w  RanaY,d0
-    move.w  RanaX,d1
-    move.w  #12,d2
-    bsr.w   PointSprite
+    bsr.w   CheckInput
+	bsr.w	UpdateRanaPosition
+    bsr.w	DrawRana
+
 
 ; Fine prova movimento
 
 ; Inizio test collisioni
-
-    
+  
     move.w  $dff00e,d3
     btst.l  #4,d3
     beq.s   .nocoll
@@ -244,13 +236,7 @@ mainloop:
     move.w  #$0fff,$dff180
 
 .nocoll
-
-
 ; Fine test collisioni
-
-
-
-
 
     bsr.w   wframe
     btst    #6,$bfe001
@@ -274,25 +260,26 @@ mainloop:
 
 ; *************** INIZIO ROUTINE UTILITY
 
-UpdateRanaPosition:
+
+CheckInput:
+
+	cmpi.w	#1,RanaState	; Se sta saltando salto il controllo
+	beq.s	.exit
+
     move.w  $dff00c,d3
     btst.l  #1,d3       ; Bit 1 (destra) è azzerato?
     beq.s   .nodestra   ; Se si salto lo spostamento a destra
 
-; Spostamento a destra
-;    cmpi.w  #320-16,ShipBobX
-;    beq.s   .exit
-    
-    addq.w   #1,RanaX
+    move.w	#3,RanaOrientation	; Destra
+	move.w	#1,RanaState
     rts
 .nodestra
     btst.l  #9,d3       ; Il bit 9 (sinistra) è azzerato?
     beq.s   .checkvert  ; Se si passo al controllo verticale
 
-;    tst.w   ShipBobX
-;    beq.s   .exit
+	move.w	#2,RanaOrientation	; Sinistra
+	move.w	#1,RanaState
 
-    subq.w  #1,RanaX
     rts                 ; Devo evitare movimenti diagonali, quindi esco subito
 .checkvert
     ; Devo fare l'xor tra i bit 9 e 8 (su) e i bit 1 e 0 (giù), quindi
@@ -303,14 +290,77 @@ UpdateRanaPosition:
     btst.l  #8,d3       ; Sta andando su?
     beq.s   .nosu       ; (bit azzerato)
 
-    subi.w  #1,RanaY   
+    move.w	#0,RanaOrientation	; Su
+	move.w	#1,RanaState
+
     rts
 .nosu
     btst.l  #0,d3       ; Sta andando giù?
     beq.s   .exit       ; Se no esce
-    addi.w  #1,RanaY
+ 
+	move.w	#1,RanaOrientation	; Su
+	move.w	#1,RanaState
+
 .exit
     rts
+
+; ---------------------------------------------
+
+UpdateRanaPosition:
+	tst.w	RanaState
+	beq.s	.exit
+
+	cmpi.w	#15,JumpFrame
+	bne.s	.moverana
+
+	move.w	#0,RanaState
+	move.w	#0,JumpFrame
+	bra.s	.exit
+
+.moverana
+	tst.w	RanaOrientation
+	bne.s	.nosu
+
+	subq.w	#1,RanaY
+	bra.s	.addjf
+
+.nosu
+	cmpi.w	#1,RanaOrientation
+	bne.s	.nogiu
+
+	addq.w	#1,RanaY
+	bra.s	.addjf
+
+.nogiu
+	cmpi.w	#2,RanaOrientation
+	bne.s	.nosx
+
+	subq.w	#1,RanaX
+	bra.s	.addjf
+
+.nosx		; A questo punto è solo a destra
+	addq.w	#1,RanaX
+
+.addjf
+	addq.w	#1,JumpFrame
+
+.exit
+	rts
+
+; ---------------------------------------------
+
+
+DrawRana:
+; a1    Indirizzo dello sprite
+; d0    Posizione verticale
+; d1    Posizione orizzontale
+; d2    Altezza
+    lea     RanaSpriteUpIdle,a1
+    move.w  RanaY,d0
+    move.w  RanaX,d1
+    move.w  #12,d2
+    bsr.w   PointSprite
+	rts
 
 ; ---------------------------
 ;
@@ -492,6 +542,21 @@ RanaX:
     dc.w    50
 RanaY:
     dc.w    50
+
+; 0: Up
+; 1: Down
+; 2: Left
+; 3: Right
+RanaOrientation:
+	dc.w	0
+
+; 0: Idle
+; 1: Jumping
+RanaState:
+	dc.w	0
+JumpFrame:
+	dc.w	0
+
 
 ; AUDIO STUFF
 
