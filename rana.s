@@ -33,7 +33,7 @@
     include "music/P61.conf"
     include "functions/init.s"
 
-background_margin = 4       ; Margine in byte, sia sinistro che destro
+background_margin = 8       ; Margine in byte, sia sinistro che destro
 
 ranaX_start = 152
 ranaY_start	= 240
@@ -781,3 +781,10 @@ RanaIdleSpriteHeights:
 	dc.w	12,12,14,14
 RanaJumpingSpriteHeights:
 	dc.w	15,15,14,14
+
+; Bobs
+
+Tronco1:
+	incbin	"gfx/Tronco1.raw"
+Tronco1_mask:
+	incbin	"gfx/Tronco1_mask.raw"
