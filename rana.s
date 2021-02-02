@@ -549,9 +549,12 @@ view_buffer:
 draw_buffer:
 	dc.l	Bitplanes2+4	; buffer di disegno
 
-Background:
+Background_nomargin:
     incbin "gfx/Background.raw"
 ;    incbin  "gfx/Colors.raw"
+
+Background:
+	dcb.b   ((40+(background_margin*2))*256)*5,0
 
 Digits:
     incbin "gfx/Digits.raw"
