@@ -224,7 +224,15 @@ mainloop:
 
     bsr.w   SwitchBuffers
 
+; Inizio test fire
+    btst    #7,$bfe001
+    bne.s   .exit_cf
 
+	add.w	#1,XBobProva
+
+.exit_cf
+
+; Fine test fire
 
 
 ; Inizio prova movimento
@@ -250,7 +258,7 @@ mainloop:
 ; Disegno bob
 	bsr.w	DrawBobs
 
-
+	bsr.w	UpdateBobPositions
 
     bsr.w   wframe
     btst    #6,$bfe001
@@ -278,24 +286,26 @@ mainloop:
 DrawBobs:
 
 ;	TODO: Sostituire con puntatore al buffer dei livelli
-	lea		Livello1,a3
+	lea		Livello1,a4
 
 .levelLoop
 
-	move.l	(a3)+,d0
+	move.l	(a4)+,d0
 	tst.l	d0					; Siamo alla fine della lista?
 	beq.s	.exit
 
 	move.l	d0,a0				; Indirizzo bob in a0
 	move.l	#0,d0
 
-	move.l	(a3)+,a1			; Indirizzo maschera in a1
+	move.l	(a4)+,a1			; Indirizzo maschera in a1
 	move.l	draw_buffer_bob,a2	; indirizzo bitplane di disegno, senza margini in a2
+	lea		Background,a3		; indirizzo background
 
-	move.w	(a3)+,d2			; larghezza in word
-	addq.l	#2,a3				; Qui salto la velocità
-	move.w	(a3)+,d0			; x
-	move.w	(a3)+,d1			; y
+
+	move.w	(a4)+,d2			; larghezza in word
+	addq.l	#2,a4				; Qui salto la velocità
+	move.w	(a4)+,d0			; x
+	move.w	(a4)+,d1			; y
 
 	move.w	#16,d3
 	move.w	#5,d4
@@ -311,15 +321,17 @@ UpdateBobPositions:
 
 ;	TODO: Sostituire con puntatore al buffer dei livelli
 	lea		Livello1,a0
-	move.l	(a0)+,d0
+
+.levelLoop
+	move.l	(a0)+,d0		; Fine lista?
+	tst.l	d0
 	beq.s	.exit
-	add.l	#16,a0			; Salto subito alla direzione
-	move.w	(a0),d0
-	tst.w	d0				; 0 è sinistra, va a sinistra?
-	bne.s	.destra			; Se non è 0 va a destra
+	add.l	#6,a0			; Salto subito alla velocità
+	move.w	(a0)+,d0		; velocità in d0
+	add.w	d0,(a0)+		; Sommo la velocità alla x del bob
+	addq.w	#2,a0			; Salto la y e punto al prossimo bob
 
-
-.destra
+	bra.s	.levelLoop
 
 .exit
 	rts
@@ -622,12 +634,18 @@ view_buffer_bob:							; Senza saltare il margine
 draw_buffer_bob:
 	dc.l	Bitplanes2						
 
+; Background, immagine base 320x256
 Background_nomargin:
     incbin "gfx/Background.raw"
 ;    incbin  "gfx/Colors.raw"
 
+; Background con margini
 Background:
 	dcb.b   ((40+(background_margin*2))*256)*5,0
+
+
+
+
 
 Digits:
     incbin "gfx/Digits.raw"
@@ -884,7 +902,8 @@ Livello1:
 	dc.l	Tronco1_mask
 	dc.w	(64/16)
 	dc.w	1				; Velocità
-	dc.w	100				; x
+XBobProva:
+	dc.w	64				; x
 	dc.w	50				; y
 
 	dc.l	Tronco1
@@ -892,8 +911,5 @@ Livello1:
 	dc.w	(64/16)
 	dc.w	1				; Velocità
 	dc.w	160				; x
-	dc.w	50				; y
-	
-
-
+	dc.w	210				; y
 	dc.l	$0

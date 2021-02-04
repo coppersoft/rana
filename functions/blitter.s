@@ -66,11 +66,12 @@ BlitBob16:
 
 ; ---------------------------------------------------------------
 
-; Funzione di blitting universale con cookie cut e margine destro di 2 word
+; Funzione di blitting universale con cookie cut e margine destro di 2 word, con background (e non bitplane) su canale C
 
 ; a0    Indirizzo Bob
 ; a1    Indirizzo Maschera
 ; a2    Indirizzo bitplane (interleaved)
+; a3    Indirizzo background
 
 ; d0    Posizione X
 ; d1    Posizione Y
@@ -114,8 +115,9 @@ BlitBob:
     mulu.w  d4,d1               ; Per il numero dei bitplane
     add.l   d0,d1               ; Gli aggiungo i byte di scostamento a destra della posizione X
     add.l   d1,a2               ; Offset con l'inizio dei bitplane
+    add.l   d1,a3               ; E con lo sfondo
 
-    move.l  a2,$dff048          ; Setto lo sfondo su BLTCPTH
+    move.l  a3,$dff048          ; Setto lo sfondo su BLTCPTH
     move.l  a2,$dff054          ; Setto la destinazione su BLTDPTH
 
     ; Calcolo moduli
@@ -199,6 +201,7 @@ CopiaSfondo:
 
     lea     Background_nomargin,a0
     lea     Background,a1
+    addq.l  #background_margin,a1                   ; Per il background mi sposto in avanti del margine
     move.w  #200,d0
     move.w  #5,d1
     bsr.w   SimpleBlit
@@ -219,6 +222,7 @@ CopiaSfondo:
 
     lea     Background_nomargin+(200*40*5),a0
     lea     Background,a1
+    addq.l  #background_margin,a1                   ; Per il background mi sposto in avanti del margine
     add.l   #200*(40+(background_margin*2))*5,a1
     move.w  #55,d0
     move.w  #5,d1
