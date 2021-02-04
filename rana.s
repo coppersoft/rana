@@ -181,6 +181,22 @@ InitLevel:
 
 ;    bsr.w   DrawScore
 
+; Prova blitting
+
+	lea		Tronco1,a0
+	lea		Tronco1_mask,a1
+	move.l	draw_buffer_bob,a2
+
+	move.w	#32,d0
+	move.w	#0,d1
+	move.w	#(64/16),d2
+	move.w	#16,d3
+	move.w	#5,d4
+
+	bsr.w	BlitBob
+
+
+; fine prova blitting
 
 ; GAME LOOP
 
@@ -208,13 +224,6 @@ mainloop:
 
     bsr.w   SwitchBuffers
 
-; Prova suono con fire    ELIMINARE
-;    btst    #7,$bfe001
-;    bne.s   .exit_cf
-
-;    bsr.w   PlayCra
-.exit_cf
-; Fine Prova suono con fire
 
 
 
@@ -545,9 +554,14 @@ Bitplanes2:
     dcb.b   ((40+(background_margin*2))*256)*5,0
 
 view_buffer:
-	dc.l	Bitplanes1+4	; buffer visualizzato
+	dc.l	Bitplanes1+background_margin	; buffer visualizzato
 draw_buffer:
-	dc.l	Bitplanes2+4	; buffer di disegno
+	dc.l	Bitplanes2+background_margin	; buffer di disegno
+
+view_buffer_bob:							; Senza saltare il margine
+	dc.l	Bitplanes1
+draw_buffer_bob:
+	dc.l	Bitplanes2						
 
 Background_nomargin:
     incbin "gfx/Background.raw"

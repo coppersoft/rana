@@ -86,6 +86,11 @@ SwitchBuffers:
 
     movem.l d0-d1/a0,-(SP)
 
+; Stessa cosa per il puntatore dei bob, dove non salto il margine
+    move.l  draw_buffer_bob,d0
+    move.l  view_buffer_bob,draw_buffer_bob
+    move.l  d0,view_buffer_bob
+
     move.l  draw_buffer,d0
     move.l  view_buffer,draw_buffer
     move.l  d0,view_buffer
