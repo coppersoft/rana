@@ -277,18 +277,33 @@ mainloop:
 	
 DrawBobs:
 
+;	TODO: Sostituire con puntatore al buffer dei livelli
 	lea		Livello1,a3
 
-	move.l	(a3)+,a0
+.levelLoop
+
+	move.l	(a3)+,d0
+	tst.l	d0
+	beq.s	.exit
+
+	move.l	d0,a0
+	move.l	#0,d0
+
 	move.l	(a3)+,a1
 	move.l	draw_buffer_bob,a2
 
 	move.w	(a3)+,d2			; larghezza in word
 	move.w	(a3)+,d0			; x
 	move.w	(a3)+,d1			; y
+
+	addq.l	#2,a3				; Qui salto la direzione
+
 	move.w	#16,d3
 	move.w	#5,d4
 	bsr.w	BlitBob
+
+	bra.s	.levelLoop
+.exit
 	rts
 
 
@@ -847,16 +862,16 @@ Livello1:
 	dc.l	Tronco1
 	dc.l	Tronco1_mask
 	dc.w	(64/16)
-	dc.w	100
-	dc.w	50
+	dc.w	100				; x
+	dc.w	50				; y
 	dc.w	1
 
 	dc.l	Tronco1
 	dc.l	Tronco1_mask
 	dc.w	(64/16)
-	dc.w	140
-	dc.w	50
+	dc.w	160				; x
+	dc.w	50				; y
 	dc.w	1
 
 
-	dc.l	$ffffffff
+	dc.l	$0
