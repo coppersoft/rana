@@ -183,17 +183,17 @@ InitLevel:
 
 ; Prova blitting
 
-	lea		Tronco1,a0
-	lea		Tronco1_mask,a1
-	move.l	draw_buffer_bob,a2
+;	lea		Tronco1,a0
+;	lea		Tronco1_mask,a1
+;	move.l	draw_buffer_bob,a2
 
-	move.w	#32,d0
-	move.w	#0,d1
-	move.w	#(64/16),d2
-	move.w	#16,d3
-	move.w	#5,d4
+;	move.w	#32,d0
+;	move.w	#0,d1
+;	move.w	#(64/16),d2
+;	move.w	#16,d3
+;	move.w	#5,d4
 
-	bsr.w	BlitBob
+;	bsr.w	BlitBob
 
 
 ; fine prova blitting
@@ -247,6 +247,11 @@ mainloop:
 .nocoll
 ; Fine test collisioni
 
+; Disegno bob
+	bsr.w	DrawBobs
+
+
+
     bsr.w   wframe
     btst    #6,$bfe001
     bne     mainloop
@@ -269,6 +274,25 @@ mainloop:
 
 ; *************** INIZIO ROUTINE UTILITY
 
+	
+DrawBobs:
+
+	lea		Livello1,a3
+
+	move.l	(a3)+,a0
+	move.l	(a3)+,a1
+	move.l	draw_buffer_bob,a2
+
+	move.w	(a3)+,d2			; larghezza in word
+	move.w	(a3)+,d0			; x
+	move.w	(a3)+,d1			; y
+	move.w	#16,d3
+	move.w	#5,d4
+	bsr.w	BlitBob
+	rts
+
+
+; -----------------------------------------
 
 CheckInput:
 
@@ -805,3 +829,34 @@ Tronco1:
 	incbin	"gfx/Tronco1.raw"
 Tronco1_mask:
 	incbin	"gfx/Tronco1_mask.raw"
+
+LivelloAttuale:
+	dcb.l	1000
+
+	EVEN
+
+; Struttura dati per i livelli
+
+; - Indirizzo bob
+; - Indirizzo bobmask
+; - larghezza in word
+; - x (iniziale)
+; - y
+; - velocità (con segno)
+Livello1:
+	dc.l	Tronco1
+	dc.l	Tronco1_mask
+	dc.w	(64/16)
+	dc.w	100
+	dc.w	50
+	dc.w	1
+
+	dc.l	Tronco1
+	dc.l	Tronco1_mask
+	dc.w	(64/16)
+	dc.w	140
+	dc.w	50
+	dc.w	1
+
+
+	dc.l	$ffffffff
