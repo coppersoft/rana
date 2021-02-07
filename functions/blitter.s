@@ -201,7 +201,7 @@ CopiaSfondo:
 
     lea     Background_nomargin,a0
     lea     Background,a1
-    addq.l  #background_margin,a1                   ; Per il background mi sposto in avanti del margine
+    add.l   #background_margin,a1                   ; Per il background mi sposto in avanti del margine
     move.w  #200,d0
     move.w  #5,d1
     bsr.w   SimpleBlit
@@ -222,7 +222,7 @@ CopiaSfondo:
 
     lea     Background_nomargin+(200*40*5),a0
     lea     Background,a1
-    addq.l  #background_margin,a1                   ; Per il background mi sposto in avanti del margine
+    add.l   #background_margin,a1                   ; Per il background mi sposto in avanti del margine
     add.l   #200*(40+(background_margin*2))*5,a1
     move.w  #55,d0
     move.w  #5,d1

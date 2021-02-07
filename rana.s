@@ -33,7 +33,7 @@
     include "music/P61.conf"
     include "functions/init.s"
 
-background_margin = 8       ; Margine in byte, sia sinistro che destro
+background_margin = 10       ; Margine in byte, sia sinistro che destro
 
 ranaX_start = 152
 ranaY_start	= 240
@@ -895,6 +895,24 @@ Tronco1:
 	incbin	"gfx/Tronco1.raw"
 Tronco1_mask:
 	incbin	"gfx/Tronco1_mask.raw"
+Tronco2:
+	incbin	"gfx/Tronco2.raw"
+Tronco2_mask:
+	incbin	"gfx/Tronco2_mask.raw"
+AutoBlu:
+	incbin	"gfx/AutoBlu.raw"
+AutoBlu_mask:
+	incbin	"gfx/AutoBlu_mask.raw"
+Furgone:
+	incbin	"gfx/Furgone.raw"
+Furgone_mask:
+	incbin	"gfx/Furgone_mask.raw"
+Buggy:
+	incbin	"gfx/Buggy.raw"
+Buggy_mask:
+	incbin	"gfx/Buggy_mask.raw"
+
+
 
 LivelloAttuale:
 	dcb.l	1000
@@ -918,7 +936,19 @@ Livello1:
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	-2				; Velocità
+	dc.w	1				; Velocità
+	dc.w	0				; x
+	dc.w	0				; x iniziale
+	dc.w	50				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	1				; Velocità
 	dc.w	64				; x
 	dc.w	64				; x iniziale
 	dc.w	50				; y
@@ -927,13 +957,24 @@ Livello1:
 	dc.w	1				; Fotogrammi totali
 
 
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	64+96				; x
+	dc.w	64+96				; x iniziale
+	dc.w	50				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	64				; x
-	dc.w	64				; x iniziale
-	dc.w	70				; y
+	dc.w	64+96+96				; x
+	dc.w	64+96+96				; x iniziale
+	dc.w	50				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
 	dc.w	1				; Fotogrammi totali
