@@ -224,15 +224,7 @@ mainloop:
 
     bsr.w   SwitchBuffers
 
-; Inizio test fire
-    btst    #7,$bfe001
-    bne.s   .exit_cf
 
-	add.w	#1,XBobProva
-
-.exit_cf
-
-; Fine test fire
 
 
 ; Inizio prova movimento
@@ -305,7 +297,13 @@ DrawBobs:
 	move.w	(a4)+,d2			; larghezza in word
 	addq.l	#2,a4				; Qui salto la velocità
 	move.w	(a4)+,d0			; x
+	addq.l	#2,a4				; Salto x iniziale
 	move.w	(a4)+,d1			; y
+
+	addq.l	#2,a4				; salto il contatore fotogramma
+
+; TODO: selezionare il fotogramma
+	addq.l	#4,a4				; Per il momento salto fotogramma ttuale e fotogrammi totali
 
 	move.w	#16,d3
 	move.w	#5,d4
@@ -329,7 +327,7 @@ UpdateBobPositions:
 	add.l	#6,a0			; Salto subito alla velocità
 	move.w	(a0)+,d0		; velocità in d0
 	add.w	d0,(a0)+		; Sommo la velocità alla x del bob
-	addq.w	#2,a0			; Salto la y e punto al prossimo bob
+	add.w	#10,a0			; Salto la y e i dati sui fotogrammi, passando al prossimo bob
 
 	bra.s	.levelLoop
 
@@ -894,22 +892,34 @@ LivelloAttuale:
 ; - Indirizzo bobmask
 ; - larghezza in word
 ; - velocità (con segno)
+; - x attuale
 ; - x (iniziale)
 ; - y
+; - contatore fotogramma
+; - fotogramma attuale
+; - fotogrammi totali
 
 Livello1:
-	dc.l	Tronco1
-	dc.l	Tronco1_mask
-	dc.w	(64/16)
-	dc.w	1				; Velocità
-XBobProva:
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	1				; Velocitàs
 	dc.w	64				; x
+	dc.w	64				; x iniziale
 	dc.w	50				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
 
-	dc.l	Tronco1
-	dc.l	Tronco1_mask
-	dc.w	(64/16)
-	dc.w	1				; Velocità
-	dc.w	160				; x
-	dc.w	210				; y
-	dc.l	$0
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	1				; Velocitàs
+	dc.w	64				; x
+	dc.w	64				; x iniziale
+	dc.w	70				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+	dc.l	0
