@@ -918,7 +918,7 @@ Livello1:
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	-1				; Velocità
+	dc.w	-2				; Velocità
 	dc.w	64				; x
 	dc.w	64				; x iniziale
 	dc.w	50				; y
@@ -926,7 +926,6 @@ Livello1:
 	dc.w	0				; Fotogramma attuale
 	dc.w	1				; Fotogrammi totali
 
-	dc.l	0
 
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
