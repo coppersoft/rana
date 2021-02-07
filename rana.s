@@ -326,7 +326,22 @@ UpdateBobPositions:
 	beq.s	.exit
 	add.l	#6,a0			; Salto subito alla velocità
 	move.w	(a0)+,d0		; velocità in d0
-	add.w	d0,(a0)+		; Sommo la velocità alla x del bob
+	move.w	(a0),d1			; Posizione attuale in d1
+
+
+
+	add.w	d0,d1		; sommo la velocità alla posizione attuale
+
+	cmp.w	#0,d1		; E' un numero negativo?
+	bgt.s	.nosx_marg	; Se è positivo salto
+	move.w	#320+(background_margin*8),d1		; Se è negativo lo riporto dall'altro lato, a destra
+	bra.s	.done
+.nosx_marg
+	cmpi.w	#320+(background_margin*8),d1		; E' oltre il margine destro?
+	blt.s	.done		; Se no salto
+	move.w	#0,d1		; Se si lo riporto al margine sinistro
+.done
+	move.w	d1,(a0)+
 	add.w	#10,a0			; Salto la y e i dati sui fotogrammi, passando al prossimo bob
 
 	bra.s	.levelLoop
@@ -903,7 +918,7 @@ Livello1:
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	1				; Velocitàs
+	dc.w	-1				; Velocità
 	dc.w	64				; x
 	dc.w	64				; x iniziale
 	dc.w	50				; y
@@ -911,10 +926,12 @@ Livello1:
 	dc.w	0				; Fotogramma attuale
 	dc.w	1				; Fotogrammi totali
 
+	dc.l	0
+
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	1				; Velocitàs
+	dc.w	1				; Velocità
 	dc.w	64				; x
 	dc.w	64				; x iniziale
 	dc.w	70				; y
