@@ -223,7 +223,7 @@ mainloop:
     bsr.w   CheckSoundStop
 
     bsr.w   SwitchBuffers
-
+	bsr.w   wframe
 
 
 
@@ -248,11 +248,13 @@ mainloop:
 ; Fine test collisioni
 
 ; Disegno bob
+	
+
 	bsr.w	DrawBobs
 
 	bsr.w	UpdateBobPositions
 
-    bsr.w   wframe
+    
     btst    #6,$bfe001
     bne     mainloop
 
@@ -979,4 +981,61 @@ Livello1:
 	dc.w	0				; Fotogramma attuale
 	dc.w	1				; Fotogrammi totali
 
+; Riga 2
+
+
+
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	-2				; Velocità
+	dc.w	0				; x
+	dc.w	0				; x iniziale
+	dc.w	70				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	-2				; Velocità
+	dc.w	64				; x
+	dc.w	64				; x iniziale
+	dc.w	70				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	-2				; Velocità
+	dc.w	64+96				; x
+	dc.w	64+96				; x iniziale
+	dc.w	70				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	-2				; Velocità
+	dc.w	64+96+96				; x
+	dc.w	64+96+96				; x iniziale
+	dc.w	70				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+
+
+
+
+
 	dc.l	0
+
+
