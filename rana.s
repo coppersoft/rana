@@ -1031,9 +1031,101 @@ Livello1:
 	dc.w	0				; Fotogramma attuale
 	dc.w	1				; Fotogrammi totali
 
+; Riga 3
+
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	30				; x
+	dc.w	0				; x iniziale
+	dc.w	90				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
 
 
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	30+64				; x
+	dc.w	30+64				; x iniziale
+	dc.w	90				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
 
+
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	30+64+96				; x
+	dc.w	30+64+96				; x iniziale
+	dc.w	90				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	30+64+96+96				; x
+	dc.w	30+64+96+96				; x iniziale
+	dc.w	90				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+; Riga 4
+
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	2				; Velocità
+	dc.w	30				; x
+	dc.w	0				; x iniziale
+	dc.w	110				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	2				; Velocità
+	dc.w	30+64				; x
+	dc.w	30+64				; x iniziale
+	dc.w	110				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask	; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
+	dc.w	2				; Velocità
+	dc.w	30+64+96				; x
+	dc.w	30+64+96				; x iniziale
+	dc.w	110				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
+
+	dc.l	Tronco1			; Indirizzo bob
+	dc.l	Tronco1_mask	; Indirizzo bobmask
+	dc.w	(64/16)			; Larghezza in word
+	dc.w	2				; Velocità
+	dc.w	30+64+96+96				; x
+	dc.w	30+64+96+96				; x iniziale
+	dc.w	110				; y
+	dc.w	0				; Contatore fotogramma
+	dc.w	0				; Fotogramma attuale
+	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	0
