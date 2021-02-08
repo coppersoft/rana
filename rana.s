@@ -35,8 +35,10 @@
 
 background_margin = 10       ; Margine in byte, sia sinistro che destro
 
-ranaX_start = 152
+ranaX_start = jump_length_horiz*6
 ranaY_start	= 240
+jump_length_vert = 21
+jump_length_horiz = 16
 
 ; ===== INIZIO CODICE 
 
@@ -411,10 +413,22 @@ CheckInput:
 ; ---------------------------------------------
 
 UpdateRanaPosition:
-	tst.w	RanaState
+	tst.w	RanaState				; Se è idle esce
 	beq.s	.exit
 
-	cmpi.w	#15,JumpFrame
+;	cmpi.w	#1,RanaState			; Sta saltando? In seguito, dopo attach
+
+	cmpi.w	#1,RanaOrientation		; In che verso sta saltando?
+	bgt.s	.orizzontale
+									; Verticalmente
+	move.w	#jump_length_vert,d0
+	bra.s	.finecontrollo
+.orizzontale
+	move.w	#jump_length_horiz,d0
+
+.finecontrollo
+
+	cmp.w	JumpFrame,d0
 	bne.s	.moverana
 
 	move.w	#0,RanaState
