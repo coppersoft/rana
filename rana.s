@@ -361,11 +361,14 @@ UpdateBobPositions:
 CheckInput:
 
 	cmpi.w	#1,RanaState	; Se sta saltando salto il controllo
-	beq.s	.exit
+	beq.w	.exit
 
     move.w  $dff00c,d3
     btst.l  #1,d3       ; Bit 1 (destra) è azzerato?
     beq.s   .nodestra   ; Se si salto lo spostamento a destra
+
+	cmpi.w	#320-16,RanaX		; Se è al margine destro non salta
+	bge.w	.exit
 
     move.w	#3,RanaOrientation	; Destra
 	move.w	#1,RanaState
@@ -376,6 +379,9 @@ CheckInput:
 .nodestra
     btst.l  #9,d3       ; Il bit 9 (sinistra) è azzerato?
     beq.s   .checkvert  ; Se si passo al controllo verticale
+
+	cmpi.w	#0,RanaX	; Se è al margine sinistro non salta
+	ble.w	.exit
 
 	move.w	#2,RanaOrientation	; Sinistra
 	move.w	#1,RanaState
@@ -402,6 +408,9 @@ CheckInput:
     btst.l  #0,d3       ; Sta andando giù?
     beq.s   .exit       ; Se no esce
  
+	cmpi.w	#ranaY_start,RanaY		; Se è al margine inferiore non salta
+	bge.w	.exit
+
 	move.w	#1,RanaOrientation	; Su
 	move.w	#1,RanaState
 
