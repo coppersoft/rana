@@ -259,13 +259,13 @@ mainloop:
 .nocoll
 ; Fine test collisioni
 
+	bsr.w	HandleExplosionAnimation
+
 ; Disegno bob
 	
 
 	bsr.w	DrawBobs
-
 	bsr.w	UpdateBobPositions
-
     
     btst    #6,$bfe001
     bne     mainloop
@@ -302,7 +302,36 @@ HandleExplosionAnimation:
 	cmpi.w	#2,RanaState
 	bne.s	.exit
 
-	
+	move.w	ExplosionActualFrame,d0
+	lea		ExplosionFrameList,a1
+	lsl.w	#1,d0
+	add.l	d0,a1
+	move.w	(a1),d5
+
+	cmpi.w	#$ffff,d5		; E' alla fine dell'animazione?
+	bne.s	.goanim
+
+	move.w	#0,ExplosionSxSpritePointer+2	; Se si disattivo lo sprite...
+	move.w	#0,ExplosionSxSpritePointer+6
+	move.w	#0,ExplosionDxSpritePointer+2
+	move.w	#0,ExplosionDxSpritePointer+6
+
+	move.w	#0,ExplosionActualFrame			; Resetto il contatore del frame
+
+	move.w	#0,RanaState					; Riattivo la rana in idle
+	move.w	#ranaX_start,RanaX
+	move.w	#ranaY_start,RanaY
+	move.w	#0,RanaOrientation
+	bra.s	.exit
+
+.goanim:
+
+	move.w	RanaX,d1
+	subq.w	#8,d1
+	move.w	RanaY,d0
+	subq.w	#8,d0
+	bsr.w	ShowExplosionFrame
+	addq.w	#1,ExplosionActualFrame
 
 .exit
 	rts
@@ -992,7 +1021,7 @@ RanaSpriteRightJumping:
 	include	"gfx/ExplosionSprite.s"
 	
 ExplosionFrameList:
-	dc.w	0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,$ff
+	dc.w	0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,12,12,12,12,$ffff
 ExplosionActualFrame:
 	dc.w	0
 
