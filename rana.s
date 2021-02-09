@@ -202,10 +202,10 @@ InitLevel:
 
 
 
-	move.w	#50,d0
-	move.w	#50,d1
-	move.w	#5,d5
-	bsr.w	ShowExplosionFrame
+;	move.w	#50,d0
+;	move.w	#50,d1
+;	move.w	#5,d5
+;	bsr.w	ShowExplosionFrame
 
 
 
@@ -254,7 +254,7 @@ mainloop:
     btst.l  #4,d3
     beq.s   .nocoll
 
-    move.w  #$0fff,$dff180
+    bsr.w	KillRana
 
 .nocoll
 ; Fine test collisioni
@@ -288,6 +288,28 @@ mainloop:
 	
 
 ; *************** INIZIO ROUTINE UTILITY
+
+KillRana:
+	move.w	#2,RanaState
+	move.w	#0,RanaSpritePointer+2
+	move.w	#0,RanaSpritePointer+6
+	rts
+
+; -------------
+
+HandleExplosionAnimation:
+
+	cmpi.w	#2,RanaState
+	bne.s	.exit
+
+	
+
+.exit
+	rts
+
+
+
+; -------------
 
 ; d0: y
 ; d1: x
@@ -414,6 +436,9 @@ CheckInput:
 	cmpi.w	#1,RanaState	; Se sta saltando salto il controllo
 	beq.w	.exit
 
+	cmpi.w	#2,RanaState	; Anche se sta esplodendo
+	beq.w	.exit
+
     move.w  $dff00c,d3
     btst.l  #1,d3       ; Bit 1 (destra) è azzerato?
     beq.s   .nodestra   ; Se si salto lo spostamento a destra
@@ -476,7 +501,8 @@ UpdateRanaPosition:
 	tst.w	RanaState				; Se è idle esce
 	beq.s	.exit
 
-;	cmpi.w	#1,RanaState			; Sta saltando? In seguito, dopo attach
+	cmpi.w	#2,RanaState			; Pure se sta esplodendo
+	beq.s	.exit
 
 	cmpi.w	#1,RanaOrientation		; In che verso sta saltando?
 	bgt.s	.orizzontale
@@ -529,10 +555,11 @@ UpdateRanaPosition:
 
 
 DrawRana:
-
+	cmpi.w	#2,RanaState	; Se sta esplodendo non la visualizzo
+	beq.s	.exit
 
 	tst.w	RanaState
-	beq.s	.idle
+	beq.s	.idle						
 	lea		RanaJumpingFrames,a0
 	lea		RanaJumpingSpriteHeights,a2
 	bra.s	.draw
@@ -561,6 +588,7 @@ DrawRana:
     move.w  RanaX,d1
     move.w  (a2),d2
     bsr.w   PointSprite		; Lo posiziono
+.exit
 	rts
 
 ; ---------------------------
@@ -769,6 +797,7 @@ RanaOrientation:
 
 ; 0: Idle
 ; 1: Jumping
+; 2: Exploding
 RanaState:
 	dc.w	0
 JumpFrame:
@@ -961,8 +990,11 @@ RanaSpriteRightJumping:
 ; Esplosione
 
 	include	"gfx/ExplosionSprite.s"
-;	include "gfx/wip/Explosion2.s"
-
+	
+ExplosionFrameList:
+	dc.w	0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,9,9,9,10,10,10,11,11,11,12,12,12,$ff
+ExplosionActualFrame:
+	dc.w	0
 
 RanaIdleFrames:
 	dc.l	RanaSpriteUpIdle,RanaSpriteDownIdle,RanaSpriteLeftIdle,RanaSpriteRightIdle
