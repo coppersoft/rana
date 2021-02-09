@@ -5,6 +5,9 @@
 ; d1    Posizione orizzontale
 ; d2    Altezza
 PointSprite:
+
+    movem.l d0-d2/a1,-(SP)
+
     add.w   #$2c,d0         ; Aggiungi inizio schermo (vedi $dff08e DIWSTRT)
     move.b  d0,(a1)         ; Copio il byte in VSTART
     btst.l  #8,d0           ; Il bit 8 della posizione è settato?
@@ -33,4 +36,7 @@ PointSprite:
 .placecoords
     lsr     #1,d1           ; Tolgo il bit basso di HSTART
     move.b  d1,1(a1)        ; E lo setto in HSTART
+
+    movem.l (SP)+,d0-d2/a1
+
     rts

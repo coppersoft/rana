@@ -202,39 +202,10 @@ InitLevel:
 
 
 
-; inizio prova sprite esplosione
-   	lea     ExplosionSxSpritePointer,a0
-	lea		ExplosionSpriteFrames,a1
-
-    move.l  a1,d0
-
-    move.w  d0,6(a0)
-    swap    d0
-    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
-	
 	move.w	#50,d0
 	move.w	#50,d1
-	move.w	#32,d2
-	bsr.w	PointSprite
-
-; Sprite destra
-
-	lea		ExplosionDxSpritePointer,a0
-	lea		ExplosionSpriteFrames,a1
-	add.l	#(32*4)+8,a1
-
-	move.l	a1,d0
-
-    move.w  d0,6(a0)
-    swap    d0
-    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
-	
-	move.w	#50,d0
-	move.w	#50+16,d1
-	move.w	#32,d2
-	bsr.w	PointSprite
-
-; fine prova sprite esplosione
+	move.w	#12,d5
+	bsr.w	ShowExplosionFrame
 
 
 
@@ -317,6 +288,46 @@ mainloop:
 	
 
 ; *************** INIZIO ROUTINE UTILITY
+
+; d0: y
+; d1: x
+; d5: frame
+ShowExplosionFrame:
+
+; inizio prova sprite esplosione
+   	lea     ExplosionSxSpritePointer,a0
+	lea		ExplosionSpriteFrames,a1
+
+	mulu.w	#((32*4)+8)*2,d5	; salto al frame n
+	add.l	d5,a1
+
+    move.l  a1,d3
+
+    move.w  d3,6(a0)
+    swap    d3
+    move.w  d3,2(a0)		; Punto lo sprite nella copperlist
+	
+	
+	move.w	#32,d2			; Altezza in d2
+	bsr.w	PointSprite
+
+; Sprite destra
+
+	lea		ExplosionDxSpritePointer,a0
+	add.l	#(32*4)+8,a1
+
+	move.l	a1,d3
+
+    move.w  d3,6(a0)
+    swap    d3
+    move.w  d3,2(a0)		; Punto lo sprite nella copperlist
+	
+	add.w	#16,d1
+	move.w	#32,d2
+	bsr.w	PointSprite
+
+	rts
+
 
 	
 DrawBobs:
