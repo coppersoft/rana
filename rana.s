@@ -301,7 +301,7 @@ KillRana:
 HandleExplosionAnimation:
 
 	cmpi.w	#2,RanaState
-	bne.s	.exit
+	bne.w	.exit
 
 	move.w	ExplosionActualFrame,d0
 	lea		ExplosionFrameList,a1
@@ -323,6 +323,7 @@ HandleExplosionAnimation:
 	move.w	#ranaX_start,RanaX
 	move.w	#ranaY_start,RanaY
 	move.w	#0,RanaOrientation
+	move.w	#0,JumpFrame
 	bra.s	.exit
 
 .goanim:
