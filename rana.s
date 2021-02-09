@@ -200,6 +200,45 @@ InitLevel:
 
 ; fine prova blitting
 
+
+
+; inizio prova sprite esplosione
+   	lea     ExplosionSxSpritePointer,a0
+	lea		ExplosionSpriteFrames,a1
+
+    move.l  a1,d0
+
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
+	
+	move.w	#50,d0
+	move.w	#50,d1
+	move.w	#32,d2
+	bsr.w	PointSprite
+
+; Sprite destra
+
+	lea		ExplosionDxSpritePointer,a0
+	lea		ExplosionSpriteFrames,a1
+	add.l	#(32*4)+8,a1
+
+	move.l	a1,d0
+
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
+	
+	move.w	#50,d0
+	move.w	#50+16,d1
+	move.w	#32,d2
+	bsr.w	PointSprite
+
+; fine prova sprite esplosione
+
+
+
+
 ; GAME LOOP
 
     move.l  #0,d0
@@ -275,6 +314,7 @@ mainloop:
     include "functions/utils.s"
     include "functions/audio.s"
     include "music/P6112-Play.s"
+	
 
 ; *************** INIZIO ROUTINE UTILITY
 
@@ -616,8 +656,10 @@ Palette:
 	dc.w $12a,0
 	dc.w $12c,0     ;3
 	dc.w $12e,0
+ExplosionSxSpritePointer:
 	dc.w $130,0     ;4
 	dc.w $132,0
+ExplosionDxSpritePointer:
 	dc.w $134,0     ;5
 	dc.w $136,0
 RanaSpritePointer:
@@ -904,6 +946,12 @@ RanaSpriteRightJumping:
 	dc.w	$607e,$0000
 
     dc.w 0,0
+
+; Esplosione
+
+	include	"gfx/ExplosionSprite.s"
+;	include "gfx/wip/Explosion2.s"
+
 
 RanaIdleFrames:
 	dc.l	RanaSpriteUpIdle,RanaSpriteDownIdle,RanaSpriteLeftIdle,RanaSpriteRightIdle
