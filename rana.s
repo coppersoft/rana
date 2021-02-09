@@ -293,6 +293,7 @@ KillRana:
 	move.w	#2,RanaState
 	move.w	#0,RanaSpritePointer+2
 	move.w	#0,RanaSpritePointer+6
+	bsr.w	PlayBoom
 	rts
 
 ; -------------
@@ -838,6 +839,9 @@ JumpFrame:
 Cra:
 ;    incbin  "sfx/cra.raw"
     incbin  "sfx/cra_11025.raw"
+
+Boom:
+	incbin	"sfx/Explosion.raw"	
 Silent:
     dcb.w   100
 SoundStarted:
