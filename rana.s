@@ -386,7 +386,9 @@ ShowExplosionFrame:
 DrawBobs:
 
 ;	TODO: Sostituire con puntatore al buffer dei livelli
-	lea		Livello1,a4
+;	lea		Livello1,a4
+	move.l	LivelloAttuale,a4
+
 
 .levelLoop
 
@@ -426,7 +428,8 @@ DrawBobs:
 UpdateBobPositions:
 
 ;	TODO: Sostituire con puntatore al buffer dei livelli
-	lea		Livello1,a0
+;	lea		Livello1,a0
+	move.l	LivelloAttuale,a0
 
 .levelLoop
 	move.l	(a0)+,d0		; Fine lista?
@@ -1065,7 +1068,7 @@ Buggy_mask:
 
 
 LivelloAttuale:
-	dcb.l	1000
+	dc.l	Livello1
 
 	EVEN
 
