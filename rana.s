@@ -407,7 +407,7 @@ DrawBobs:
 	move.w	(a4)+,d2			; larghezza in word
 	addq.l	#2,a4				; Qui salto la velocità
 	move.w	(a4)+,d0			; x
-	addq.l	#2,a4				; Salto x iniziale
+;	addq.l	#2,a4				; Salto x iniziale
 	move.w	(a4)+,d1			; y
 
 	addq.l	#2,a4				; salto il contatore fotogramma
@@ -453,7 +453,10 @@ UpdateBobPositions:
 	move.w	#0,d1		; Se si lo riporto al margine sinistro
 .done
 	move.w	d1,(a0)+
-	add.w	#10,a0			; Salto la y e i dati sui fotogrammi, passando al prossimo bob
+
+; MODIFICARE QUI
+
+	add.w	#8,a0			; Salto la y e i dati sui fotogrammi, passando al prossimo bob
 
 	bra.s	.levelLoop
 
@@ -1114,7 +1117,6 @@ Livello1:
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
 	dc.w	0				; x
-	dc.w	0				; x iniziale
 	dc.w	50				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1126,7 +1128,6 @@ Livello1:
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	1				; Velocità
 	dc.w	64				; x
-	dc.w	64				; x iniziale
 	dc.w	50				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1137,8 +1138,7 @@ Livello1:
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	64+96				; x
-	dc.w	64+96				; x iniziale
+	dc.w	64+96			; x
 	dc.w	50				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1148,8 +1148,7 @@ Livello1:
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	64+96+96				; x
-	dc.w	64+96+96				; x iniziale
+	dc.w	64+96+96		; x
 	dc.w	50				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1164,7 +1163,6 @@ Livello1:
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	-2				; Velocità
 	dc.w	0				; x
-	dc.w	0				; x iniziale
 	dc.w	70				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1176,7 +1174,6 @@ Livello1:
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	-2				; Velocità
 	dc.w	64				; x
-	dc.w	64				; x iniziale
 	dc.w	70				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1187,8 +1184,7 @@ Livello1:
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	-2				; Velocità
-	dc.w	64+96				; x
-	dc.w	64+96				; x iniziale
+	dc.w	64+96			; x
 	dc.w	70				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1198,8 +1194,7 @@ Livello1:
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	-2				; Velocità
-	dc.w	64+96+96				; x
-	dc.w	64+96+96				; x iniziale
+	dc.w	64+96+96		; x
 	dc.w	70				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1212,7 +1207,6 @@ Livello1:
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
 	dc.w	30				; x
-	dc.w	0				; x iniziale
 	dc.w	90				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1223,8 +1217,7 @@ Livello1:
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	30+64				; x
-	dc.w	30+64				; x iniziale
+	dc.w	30+64			; x
 	dc.w	90				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1235,8 +1228,7 @@ Livello1:
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	30+64+96				; x
-	dc.w	30+64+96				; x iniziale
+	dc.w	30+64+96		; x
 	dc.w	90				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1246,8 +1238,7 @@ Livello1:
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	30+64+96+96				; x
-	dc.w	30+64+96+96				; x iniziale
+	dc.w	30+64+96+96		; x
 	dc.w	90				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1260,7 +1251,6 @@ Livello1:
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	2				; Velocità
 	dc.w	30				; x
-	dc.w	0				; x iniziale
 	dc.w	110				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1271,8 +1261,7 @@ Livello1:
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	2				; Velocità
-	dc.w	30+64				; x
-	dc.w	30+64				; x iniziale
+	dc.w	30+64			; x
 	dc.w	110				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1283,8 +1272,7 @@ Livello1:
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	2				; Velocità
-	dc.w	30+64+96				; x
-	dc.w	30+64+96				; x iniziale
+	dc.w	30+64+96		; x
 	dc.w	110				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1294,8 +1282,7 @@ Livello1:
 	dc.l	Turtle_mask		; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	2				; Velocità
-	dc.w	30+64+96+96				; x
-	dc.w	30+64+96+96				; x iniziale
+	dc.w	30+64+96+96		; x
 	dc.w	110				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1308,7 +1295,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	320				; x
-	dc.w	320				; x iniziale
 	dc.w	160				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1319,7 +1305,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	160				; x
-	dc.w	160				; x iniziale
 	dc.w	160				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1331,7 +1316,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	100				; x
-	dc.w	100				; x iniziale
 	dc.w	160				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1342,7 +1326,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	50				; x
-	dc.w	50				; x iniziale
 	dc.w	160				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1355,7 +1338,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-4				; Velocità
 	dc.w	50				; x
-	dc.w	50				; x iniziale
 	dc.w	190				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1368,7 +1350,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	40				; x
-	dc.w	320				; x iniziale
 	dc.w	210				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1379,7 +1360,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	90				; x
-	dc.w	160				; x iniziale
 	dc.w	210				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1391,7 +1371,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	140				; x
-	dc.w	100				; x iniziale
 	dc.w	210				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
@@ -1402,7 +1381,6 @@ Livello1:
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	200				; x
-	dc.w	50				; x iniziale
 	dc.w	210				; y
 	dc.w	0				; Contatore fotogramma
 	dc.w	0				; Fotogramma attuale
