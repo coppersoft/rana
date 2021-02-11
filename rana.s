@@ -1081,7 +1081,12 @@ Turtle_mask:
 	incbin	"gfx/Turtle4_mask.raw"
 	incbin	"gfx/Turtle5_mask.raw"
 	incbin	"gfx/Turtle6_mask.raw"
-	
+
+; Fotogrammi bob
+TroncoFrameList:
+	dc.w	0,$ffff
+TurtleFrameList:
+	dc.w	0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,$ffff
 
 LivelloAttuale:
 	dc.l	Livello1
