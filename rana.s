@@ -1065,7 +1065,23 @@ Buggy:
 Buggy_mask:
 	incbin	"gfx/Buggy_mask.raw"
 
+; Tartaruga
+Turtle:
+	incbin	"gfx/Turtle1.raw"
+	incbin	"gfx/Turtle2.raw"
+	incbin	"gfx/Turtle3.raw"
+	incbin	"gfx/Turtle4.raw"
+	incbin	"gfx/Turtle5.raw"
+	incbin	"gfx/Turtle6.raw"
 
+Turtle_mask:
+	incbin	"gfx/Turtle1_mask.raw"
+	incbin	"gfx/Turtle2_mask.raw"
+	incbin	"gfx/Turtle3_mask.raw"
+	incbin	"gfx/Turtle4_mask.raw"
+	incbin	"gfx/Turtle5_mask.raw"
+	incbin	"gfx/Turtle6_mask.raw"
+	
 
 LivelloAttuale:
 	dc.l	Livello1
@@ -1084,6 +1100,8 @@ LivelloAttuale:
 ; - contatore fotogramma
 ; - fotogramma attuale
 ; - fotogrammi totali
+
+; Ma se invece del contatore fotogramma ci mettessi l'indirizzo di una lista fotogrammi?
 
 Livello1:
 	dc.l	Tronco1			; Indirizzo bob
@@ -1267,9 +1285,9 @@ Livello1:
 	dc.w	0				; Fotogramma attuale
 	dc.w	1				; Fotogrammi totali
 
-	dc.l	Tronco1			; Indirizzo bob
-	dc.l	Tronco1_mask	; Indirizzo bobmask
-	dc.w	(64/16)			; Larghezza in word
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
 	dc.w	2				; Velocità
 	dc.w	30+64+96+96				; x
 	dc.w	30+64+96+96				; x iniziale
