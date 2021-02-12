@@ -407,13 +407,40 @@ DrawBobs:
 	move.w	(a4)+,d2			; larghezza in word
 	addq.l	#2,a4				; Qui salto la velocità
 	move.w	(a4)+,d0			; x
-;	addq.l	#2,a4				; Salto x iniziale
 	move.w	(a4)+,d1			; y
 
-	addq.l	#2,a4				; salto il contatore fotogramma
+; Inizio gestione fotogrammi
 
-; TODO: selezionare il fotogramma
-	addq.l	#4,a4				; Per il momento salto fotogramma ttuale e fotogrammi totali
+	move.l	(a4)+,a5			; indirizzo lista fotogrammi in a5
+	move.w	(a4),d5				; indice fotogramma attuale in d5
+
+	lsl.w	#1,d5				; moltiplico per 2
+	add.l	d5,a5				; Trovo l'indirizzo dell'indice del fotogramma attuale
+
+	move.w	(a5)+,d5			; in d5 il fotogramma attuale, puntando al successivo
+								; per il controllo fine lista
+
+	mulu.w	d2,d5				; Moltiplico il fotogramma attuale per la larghezza in word
+	lsl.w	#1,d5				; in byte
+	lsl.w	#4,d5				; Per 16 righe
+	mulu.w	#5,d5 				; Per il numero di bitplane
+	
+
+	add.w	d5,a0				; Sommo l'offset all'indirizzo bob
+	add.w	d5,a1				; E alla maschera
+
+; Controllo che non siamo a fine lista
+	move.w	(a5),d5				; Indice del fotogramma successivo
+
+	cmpi.w	#$ffff,d5			; fine lista?
+	bne.s	.nofine
+	move.w	#-1,(a4)
+.nofine
+	add.w	#1,(a4)				; Avanzo al prossimo fotogramma per il prossimo draw
+
+	add.w	#2,a4				; Prossimo bob
+
+; fine gestione fotogrammi
 
 	move.w	#16,d3
 	move.w	#5,d4
@@ -1086,10 +1113,21 @@ Turtle_mask:
 	incbin	"gfx/Turtle6_mask.raw"
 
 ; Fotogrammi bob
-TroncoFrameList:
-	dc.w	0,$ffff
+SingleFrameList:
+	dc.w	0,0,$ffff
 TurtleFrameList:
-	dc.w	0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,$ffff
+	dc.w	5,5,5,5,5,5,5,5,5,5,5,5
+	dc.w	4,4,4,4,4,4,4,4,4,4,4,4
+	dc.w	3,3,3,3,3,3,3,3,3,3,3,3
+	dc.w	2,2,2,2,2,2,2,2,2,2,2,2
+	dc.w	1,1,1,1,1,1,1,1,1,1,1,1
+	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
+	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
+	dc.w	1,1,1,1,1,1,1,1,1,1,1,1
+	dc.w	2,2,2,2,2,2,2,2,2,2,2,2
+	dc.w	3,3,3,3,3,3,3,3,3,3,3,3
+	dc.w	4,4,4,4,4,4,4,4,4,4,4,4
+	dc.w	$ffff
 
 LivelloAttuale:
 	dc.l	Livello1
@@ -1112,15 +1150,15 @@ LivelloAttuale:
 ; Ma se invece del contatore fotogramma ci mettessi l'indirizzo di una lista fotogrammi?
 
 Livello1:
+
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
 	dc.w	0				; x
 	dc.w	50				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1129,9 +1167,8 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	64				; x
 	dc.w	50				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1140,9 +1177,8 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	64+96			; x
 	dc.w	50				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
@@ -1150,23 +1186,19 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	64+96+96		; x
 	dc.w	50				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 ; Riga 2
 
-
-
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	-2				; Velocità
 	dc.w	0				; x
 	dc.w	70				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1175,9 +1207,8 @@ Livello1:
 	dc.w	-2				; Velocità
 	dc.w	64				; x
 	dc.w	70				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1186,9 +1217,8 @@ Livello1:
 	dc.w	-2				; Velocità
 	dc.w	64+96			; x
 	dc.w	70				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
@@ -1196,9 +1226,8 @@ Livello1:
 	dc.w	-2				; Velocità
 	dc.w	64+96+96		; x
 	dc.w	70				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 ; Riga 3
 
@@ -1208,9 +1237,8 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	30				; x
 	dc.w	90				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1219,9 +1247,8 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	30+64			; x
 	dc.w	90				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1230,9 +1257,8 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	30+64+96		; x
 	dc.w	90				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
@@ -1240,9 +1266,8 @@ Livello1:
 	dc.w	1				; Velocità
 	dc.w	30+64+96+96		; x
 	dc.w	90				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 ; Riga 4
 
@@ -1252,9 +1277,8 @@ Livello1:
 	dc.w	2				; Velocità
 	dc.w	30				; x
 	dc.w	110				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1263,9 +1287,8 @@ Livello1:
 	dc.w	2				; Velocità
 	dc.w	30+64			; x
 	dc.w	110				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Tronco2			; Indirizzo bob
@@ -1274,9 +1297,8 @@ Livello1:
 	dc.w	2				; Velocità
 	dc.w	30+64+96		; x
 	dc.w	110				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	Turtle			; Indirizzo bob
 	dc.l	Turtle_mask		; Indirizzo bobmask
@@ -1284,9 +1306,10 @@ Livello1:
 	dc.w	2				; Velocità
 	dc.w	30+64+96+96		; x
 	dc.w	110				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	TurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
+
+	dc.l	0
 
 ; Riga 1 automobili
 
