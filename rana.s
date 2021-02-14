@@ -1105,6 +1105,8 @@ Turtle:
 	incbin	"gfx/Turtle4.raw"
 	incbin	"gfx/Turtle5.raw"
 	incbin	"gfx/Turtle6.raw"
+	incbin	"gfx/Turtle_m2.raw"
+	incbin	"gfx/Turtle_m3.raw
 
 Turtle_mask:
 	incbin	"gfx/Turtle1_mask.raw"
@@ -1113,22 +1115,46 @@ Turtle_mask:
 	incbin	"gfx/Turtle4_mask.raw"
 	incbin	"gfx/Turtle5_mask.raw"
 	incbin	"gfx/Turtle6_mask.raw"
+	incbin	"gfx/Turtle_m2_mask.raw"
+	incbin	"gfx/Turtle_m3_mask.raw
 
 ; Fotogrammi bob
 SingleFrameList:
 	dc.w	0,$ffff
 TurtleFrameList:
+	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
+	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	7,7,7,7,7,7,7,7,7,7,7,7
+	dc.w	7,7,7,7,7,7,7,7,7,7,7,7
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
+	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
+	dc.w	1,1,1,1,1,1,1,1,1,1,1,1
+	dc.w	2,2,2,2,2,2,2,2,2,2,2,2
+	dc.w	3,3,3,3,3,3,3,3,3,3,3,3
+	dc.w	4,4,4,4,4,4,4,4,4,4,4,4
+	dc.w	5,5,5,5,5,5,5,5,5,5,5,5
+	dc.w	5,5,5,5,5,5,5,5,5,5,5,5
 	dc.w	5,5,5,5,5,5,5,5,5,5,5,5
 	dc.w	4,4,4,4,4,4,4,4,4,4,4,4
 	dc.w	3,3,3,3,3,3,3,3,3,3,3,3
 	dc.w	2,2,2,2,2,2,2,2,2,2,2,2
 	dc.w	1,1,1,1,1,1,1,1,1,1,1,1
+	dc.w	$ffff
+
+
+NormalTurtleFrameList:
 	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
 	dc.w	0,0,0,0,0,0,0,0,0,0,0,0
-	dc.w	1,1,1,1,1,1,1,1,1,1,1,1
-	dc.w	2,2,2,2,2,2,2,2,2,2,2,2
-	dc.w	3,3,3,3,3,3,3,3,3,3,3,3
-	dc.w	4,4,4,4,4,4,4,4,4,4,4,4
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	7,7,7,7,7,7,7,7,7,7,7,7
+	dc.w	7,7,7,7,7,7,7,7,7,7,7,7
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
+	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
 	dc.w	$ffff
 
 LivelloAttuale:
@@ -1186,7 +1212,7 @@ Livello1:
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	-2				; Velocità
+	dc.w	2				; Velocità
 	dc.w	0				; x
 	dc.w	70				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
@@ -1196,7 +1222,7 @@ Livello1:
 	dc.l	Tronco2			; Indirizzo bob
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
-	dc.w	-2				; Velocità
+	dc.w	2				; Velocità
 	dc.w	64				; x
 	dc.w	70				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
@@ -1205,7 +1231,7 @@ Livello1:
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	-2				; Velocità
+	dc.w	2				; Velocità
 	dc.w	64+96+96		; x
 	dc.w	70				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
@@ -1243,32 +1269,45 @@ Livello1:
 
 ; Riga 4
 
-	dc.l	Tronco1			; Indirizzo bob
-	dc.l	Tronco1_mask	; Indirizzo bobmask
-	dc.w	(64/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30				; x
-	dc.w	110				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
-
-	dc.l	Tronco2			; Indirizzo bob
-	dc.l	Tronco2_mask	; Indirizzo bobmask
-	dc.w	(96/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30+64+96		; x
-	dc.w	110				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
-
 ; tartarughe
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	30		; x
+	dc.w	110				; y
+	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	30+36	; x
+	dc.w	110				; y
+	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	30+36+36	; x
+	dc.w	110				; y
+	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+
+
+
 	dc.l	Turtle			; Indirizzo bob
 	dc.l	Turtle_mask		; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	30+64+96+96		; x
 	dc.w	110				; y
-	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.l	NormalTurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
 	dc.l	Turtle			; Indirizzo bob
@@ -1277,7 +1316,7 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	30+64+96+96+36	; x
 	dc.w	110				; y
-	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.l	NormalTurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
 	dc.l	Turtle			; Indirizzo bob
@@ -1286,8 +1325,12 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	30+64+96+96+36+36	; x
 	dc.w	110				; y
-	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.l	NormalTurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
+
+
+
+
 
 ; Riga 1 automobili
 
