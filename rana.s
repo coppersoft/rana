@@ -1172,16 +1172,6 @@ Livello1:
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-
-	dc.l	Tronco2			; Indirizzo bob
-	dc.l	Tronco2_mask	; Indirizzo bobmask
-	dc.w	(96/16)			; Larghezza in word
-	dc.w	1				; Velocità
-	dc.w	64+96			; x
-	dc.w	50				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
-
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
@@ -1212,16 +1202,6 @@ Livello1:
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-
-	dc.l	Tronco2			; Indirizzo bob
-	dc.l	Tronco2_mask	; Indirizzo bobmask
-	dc.w	(96/16)			; Larghezza in word
-	dc.w	-2				; Velocità
-	dc.w	64+96			; x
-	dc.w	70				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
-
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
@@ -1238,16 +1218,6 @@ Livello1:
 	dc.w	(64/16)			; Larghezza in word
 	dc.w	1				; Velocità
 	dc.w	30				; x
-	dc.w	90				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
-
-
-	dc.l	Tronco2			; Indirizzo bob
-	dc.l	Tronco2_mask	; Indirizzo bobmask
-	dc.w	(96/16)			; Larghezza in word
-	dc.w	1				; Velocità
-	dc.w	30+64			; x
 	dc.w	90				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
@@ -1276,37 +1246,45 @@ Livello1:
 	dc.l	Tronco1			; Indirizzo bob
 	dc.l	Tronco1_mask	; Indirizzo bobmask
 	dc.w	(64/16)			; Larghezza in word
-	dc.w	2				; Velocità
+	dc.w	-1				; Velocità
 	dc.w	30				; x
 	dc.w	110				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-
 	dc.l	Tronco2			; Indirizzo bob
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
-	dc.w	2				; Velocità
-	dc.w	30+64			; x
-	dc.w	110				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
-
-
-	dc.l	Tronco2			; Indirizzo bob
-	dc.l	Tronco2_mask	; Indirizzo bobmask
-	dc.w	(96/16)			; Larghezza in word
-	dc.w	2				; Velocità
+	dc.w	-1				; Velocità
 	dc.w	30+64+96		; x
 	dc.w	110				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
+; tartarughe
 	dc.l	Turtle			; Indirizzo bob
 	dc.l	Turtle_mask		; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
-	dc.w	2				; Velocità
+	dc.w	-1				; Velocità
 	dc.w	30+64+96+96		; x
+	dc.w	110				; y
+	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	30+64+96+96+36	; x
+	dc.w	110				; y
+	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	30+64+96+96+36+36	; x
 	dc.w	110				; y
 	dc.l	TurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
