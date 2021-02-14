@@ -1311,8 +1311,6 @@ Livello1:
 	dc.l	TurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	0
-
 ; Riga 1 automobili
 
 	dc.l	Furgone			; Indirizzo bob
@@ -1321,9 +1319,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	320				; x
 	dc.w	160				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	AutoBlu			; Indirizzo bob
 	dc.l	AutoBlu_mask	; Indirizzo bobmask
@@ -1331,9 +1328,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	160				; x
 	dc.w	160				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Furgone			; Indirizzo bob
@@ -1342,9 +1338,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	100				; x
 	dc.w	160				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	AutoBlu			; Indirizzo bob
 	dc.l	AutoBlu_mask	; Indirizzo bobmask
@@ -1352,9 +1347,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	50				; x
 	dc.w	160				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 ; Riga 2 autobili
 
@@ -1364,9 +1358,8 @@ Livello1:
 	dc.w	-4				; Velocità
 	dc.w	50				; x
 	dc.w	190				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 ; Riga 3 autobili
 
@@ -1376,9 +1369,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	40				; x
 	dc.w	210				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	AutoBlu			; Indirizzo bob
 	dc.l	AutoBlu_mask	; Indirizzo bobmask
@@ -1386,9 +1378,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	90				; x
 	dc.w	210				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 	dc.l	Furgone			; Indirizzo bob
@@ -1397,9 +1388,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	140				; x
 	dc.w	210				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 	dc.l	AutoBlu			; Indirizzo bob
 	dc.l	AutoBlu_mask	; Indirizzo bobmask
@@ -1407,9 +1397,8 @@ Livello1:
 	dc.w	-1				; Velocità
 	dc.w	200				; x
 	dc.w	210				; y
-	dc.w	0				; Contatore fotogramma
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
-	dc.w	1				; Fotogrammi totali
 
 
 
