@@ -390,6 +390,8 @@ DrawBobs:
 	move.l	LivelloAttuale,a4
 
 
+	clr.l	d5
+
 .levelLoop
 
 	move.l	(a4)+,d0
@@ -1114,7 +1116,7 @@ Turtle_mask:
 
 ; Fotogrammi bob
 SingleFrameList:
-	dc.w	0,0,$ffff
+	dc.w	0,$ffff
 TurtleFrameList:
 	dc.w	5,5,5,5,5,5,5,5,5,5,5,5
 	dc.w	4,4,4,4,4,4,4,4,4,4,4,4
