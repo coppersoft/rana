@@ -40,6 +40,8 @@ ranaY_start	= 240
 jump_length_vert = 21
 jump_length_horiz = 16
 
+car_zone_y_margin=240-(5*16)
+
 ; ===== INIZIO CODICE 
 
 START:
@@ -250,13 +252,8 @@ mainloop:
 
 ; Inizio test collisioni
   
-    move.w  $dff00e,d3
-    btst.l  #4,d3
-    beq.s   .nocoll
+	bsr.w	CheckCollisions
 
-    bsr.w	KillRana
-
-.nocoll
 ; Fine test collisioni
 
 	bsr.w	HandleExplosionAnimation
@@ -288,6 +285,34 @@ mainloop:
 	
 
 ; *************** INIZIO ROUTINE UTILITY
+
+
+CheckCollisions:
+; Prima di tutto controllo in che "zona" si trova la rana, se è nella zona inferiore, quella con le auto,
+; qualsiasi collisione è mortale
+	cmpi.w	#car_zone_y_margin,RanaY
+	bge.s	.carzone
+	bsr.w	WaterZoneCollision
+	rts
+
+.carzone:
+	bsr.w	CarZoneCollision
+	rts
+
+
+
+CarZoneCollision:
+    move.w  $dff00e,d3
+    btst.l  #4,d3
+    beq.s   .nocoll
+
+    bsr.w	KillRana
+.nocoll
+	rts
+
+WaterZoneCollision:
+
+	rts
 
 KillRana:
 	move.w	#2,RanaState
