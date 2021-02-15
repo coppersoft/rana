@@ -40,7 +40,7 @@ ranaY_start	= 240
 jump_length_vert = 21
 jump_length_horiz = 16
 
-car_zone_y_margin=240-(5*16)
+car_zone_y_margin=240-(7*16)
 
 ; ===== INIZIO CODICE 
 
@@ -310,8 +310,26 @@ CarZoneCollision:
 .nocoll
 	rts
 
+; Nel caso dell'acqua, la collisione la devo controllare solo se la rana ha finito di saltare, ovvero è in stato idle (0)
+; in quel caso si verificano due scenari
+; 1: Non c'è collisione con nulla => E' finita in acqua e muore
+; 2: Si è aggrappata a qualche cosa
 WaterZoneCollision:
 
+	cmpi.w	#0,RanaState
+	bne.s	.exit
+
+	move.w	$dff00e,d3
+	btst.l	#4,d3
+	beq.s	.nocoll
+	bra.s	.coll
+.nocoll
+	bsr.w	KillRana
+	rts
+
+.coll
+
+.exit
 	rts
 
 KillRana:
