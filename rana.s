@@ -332,6 +332,32 @@ WaterZoneCollision:
 .exit
 	rts
 
+; Routine ultra semplificata per stabilire a cosa la rana si è attaccata, trova il primo oggetto
+; (tronco o tartaruga) che abbia una posizione Y iniziale e finale che comprende la Y centrale della rana
+; e ne recupera la direzione
+FindAttachedDirection:
+	move.l	LivelloAttuale,a0
+
+	move.w	RanaY,d1
+	addq.w	#6,d1			; Y target (YT) in d1, più o meno al centro Y della rana in qualsiasi fotogramma
+.levelLoop
+	move.w	(a0)+,d0
+	tst.w	d0				; Fine lista?
+	beq.s	.exit			; questo in teoria non dovrebbe mai succedere...
+	add.l	#6,a0			; Salto maschera e larghezza in word
+	move.w	(a0)+,d2		; Mi segno la velocità in d2
+	add.l	#2,a0			; Salto la x
+	move.w	(a0)+,d3		; Y del tronco/tartaruga in d4
+
+	cmp.w	d1,d3			; YT > Y
+	
+
+
+.exit
+	rts
+	
+
+
 KillRana:
 	move.w	#2,RanaState
 	move.w	#0,RanaSpritePointer+2
