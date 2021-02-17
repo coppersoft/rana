@@ -360,7 +360,7 @@ FindAttachedDirection:
 	bra.s	.levelLoop
 .sotto
 	addi.w	#16,d3	; Andiamo alla fine del tronco/tartaruga
-	cmp.w	d3,d1	; d3 (rana) <= d1 (tronco)???
+	cmp.w	d3,d1	; d1 (rana) <= d3 (fine tronco)?
 	ble.s	.trovato	; se sì ho beccato la riga di bob che mi interessa
 	bra.s	.levelLoop
 
@@ -369,10 +369,10 @@ FindAttachedDirection:
 ; Controllo se la velocità è un numero positivo o negativo
 	cmpi.w	#0,d2
 	bgt.s	.positivo
-	move.w	#$08f0,$dff180	
+	move.w	#$ffff,$dff180	
 	rts
 .positivo
-	move.w	#$0fff,$dff180
+	move.w	#$4444,$dff180
 	rts
 
 
@@ -1361,64 +1361,73 @@ Livello1:
 
 ; Riga 4
 
-; tartarughe
-
-	dc.l	Turtle			; Indirizzo bob
-	dc.l	Turtle_mask		; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
+	dc.l	Tronco2			; Indirizzo bob
+	dc.l	Tronco2_mask		; Indirizzo bobmask
+	dc.w	(96/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	30		; x
 	dc.w	110				; y
-	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	Turtle			; Indirizzo bob
-	dc.l	Turtle_mask		; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30+36	; x
-	dc.w	110				; y
-	dc.l	TurtleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
+; tartarughe
 
-	dc.l	Turtle			; Indirizzo bob
-	dc.l	Turtle_mask		; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30+36+36	; x
-	dc.w	110				; y
-	dc.l	TurtleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
+;	dc.l	Turtle			; Indirizzo bob
+;	dc.l	Turtle_mask		; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-1				; Velocità
+;	dc.w	30		; x
+;	dc.w	110				; y
+;	dc.l	TurtleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
+
+;	dc.l	Turtle			; Indirizzo bob
+;	dc.l	Turtle_mask		; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-1				; Velocità
+;	dc.w	30+36	; x
+;	dc.w	110				; y
+;	dc.l	TurtleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
+
+;	dc.l	Turtle			; Indirizzo bob
+;	dc.l	Turtle_mask		; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-1				; Velocità
+;	dc.w	30+36+36	; x
+;	dc.w	110				; y
+;	dc.l	TurtleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
 
 
 
 
-	dc.l	Turtle			; Indirizzo bob
-	dc.l	Turtle_mask		; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30+64+96+96		; x
-	dc.w	110				; y
-	dc.l	NormalTurtleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
+;	dc.l	Turtle			; Indirizzo bob
+;	dc.l	Turtle_mask		; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-1				; Velocità
+;	dc.w	30+64+96+96		; x
+;	dc.w	110				; y
+;	dc.l	NormalTurtleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
 
-	dc.l	Turtle			; Indirizzo bob
-	dc.l	Turtle_mask		; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30+64+96+96+36	; x
-	dc.w	110				; y
-	dc.l	NormalTurtleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
+;	dc.l	Turtle			; Indirizzo bob
+;	dc.l	Turtle_mask		; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-1				; Velocità
+;	dc.w	30+64+96+96+36	; x
+;	dc.w	110				; y
+;	dc.l	NormalTurtleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
 
-	dc.l	Turtle			; Indirizzo bob
-	dc.l	Turtle_mask		; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
-	dc.w	30+64+96+96+36+36	; x
-	dc.w	110				; y
-	dc.l	NormalTurtleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
+;	dc.l	Turtle			; Indirizzo bob
+;	dc.l	Turtle_mask		; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-1				; Velocità
+;	dc.w	30+64+96+96+36+36	; x
+;	dc.w	110				; y
+;	dc.l	NormalTurtleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
 
 
 

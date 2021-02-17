@@ -19,7 +19,7 @@ FindAttachedDirection:
 	bra.s	.levelLoop
 .sotto
 	addi.w	#16,d3	; Andiamo alla fine del tronco/tartaruga
-	cmp.w	d3,d1	; d3 (rana) <= d1 (tronco)???
+	cmp.w	d3,d1	; d1 (rana) <= d3 (fine tronco)?
 	ble.s	.trovato	; se sì ho beccato la riga di bob che mi interessa
 	bra.s	.levelLoop
 
@@ -39,7 +39,7 @@ FindAttachedDirection:
 	rts
 
 RanaY:
-    dc.w    50+7
+    dc.w    114
 
 Livello1:
 	dc.l	$aaaaaaaa
@@ -52,9 +52,9 @@ Livello1:
 	dc.l	$bbbbbbbb
 	dc.l	123
 	dc.w	(64/16)
-	dc.w	1				; Velocità
+	dc.w	-1				; Velocità
 	dc.w	160				; x
-	dc.w	50				; y
+	dc.w	110				; y
 
 	dc.l	0
 
