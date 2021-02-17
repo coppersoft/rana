@@ -126,11 +126,12 @@ ShowLifes:
 
 ; Routine per la stampa del punteggio
 ; CPU based, non blitter
-ScoreStart = (44*10*5)+33
+ScoreStart = ((background_margin*2)+40)*5+20
 
 DrawScore:
 
-    move.w  Score,d0
+;    move.w  Score,d0
+    move.w  RanaY,d0
     lea     ScoreStr,a0
 
     bsr.w   DecToStr            ; Converto il valore decimale in stringa
@@ -168,8 +169,8 @@ DrawScore:
 
     move.b  (a3),(a1)
     move.b  (a3)+,(a2)
-    add.l   #44,a1              ; Equivalente del modulo del blitter
-    add.l   #44,a2
+    add.l   #(background_margin*2)+40,a1              ; Equivalente del modulo del blitter
+    add.l   #(background_margin*2)+40,a2
     dbra    d1,.drawsingledigitloop
 
     addq.l  #1,d2               ; Passo alla prossima cifra

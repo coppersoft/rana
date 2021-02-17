@@ -234,6 +234,8 @@ mainloop:
 
 .nofadein:
 
+	bsr.w	DrawScore
+
     bsr.w   CheckSoundStop
 
     bsr.w   SwitchBuffers
@@ -329,6 +331,8 @@ WaterZoneCollision:
 
 .coll
 
+	bsr.w	FindAttachedDirection
+
 .exit
 	rts
 
@@ -341,16 +345,35 @@ FindAttachedDirection:
 	move.w	RanaY,d1
 	addq.w	#6,d1			; Y target (YT) in d1, più o meno al centro Y della rana in qualsiasi fotogramma
 .levelLoop
-	move.w	(a0)+,d0
-	tst.w	d0				; Fine lista?
-	beq.s	.exit			; questo in teoria non dovrebbe mai succedere...
-	add.l	#6,a0			; Salto maschera e larghezza in word
-	move.w	(a0)+,d2		; Mi segno la velocità in d2
-	add.l	#2,a0			; Salto la x
-	move.w	(a0)+,d3		; Y del tronco/tartaruga in d4
+	move.l	(a0)+,d0
+	tst.l	d0	; Fine lista?
+	beq.s	.exit	; questo in teoria non dovrebbe mai succedere...
+	add.l	#6,a0	; Salto maschera e larghezza in word
+	move.w	(a0)+,d2	; Mi segno la velocità in d2
+	add.l	#2,a0	; Salto la x
+	move.w	(a0)+,d3	; Y del tronco/tartaruga in d3
 
-	cmp.w	d1,d3			; YT > Y
-	
+; d1 y centrale rana e d3 y iniziale tronco/tartaruga
+
+	cmp.w	d3,d1	; d1 (rana) >= d3 (tronco)???
+	bge.s	.sotto	; rana è sotto l'inizio del tronco? (bge great or equal)
+	bra.s	.levelLoop
+.sotto
+	addi.w	#16,d3	; Andiamo alla fine del tronco/tartaruga
+	cmp.w	d3,d1	; d3 (rana) <= d1 (tronco)???
+	ble.s	.trovato	; se sì ho beccato la riga di bob che mi interessa
+	bra.s	.levelLoop
+
+.trovato
+
+; Controllo se la velocità è un numero positivo o negativo
+	cmpi.w	#0,d2
+	bgt.s	.positivo
+	move.w	#$08f0,$dff180	
+	rts
+.positivo
+	move.w	#$0fff,$dff180
+	rts
 
 
 .exit
