@@ -247,6 +247,7 @@ mainloop:
 
     bsr.w   CheckInput
 	bsr.w	UpdateRanaPosition
+	bsr.w	CheckForDragging
     bsr.w	DrawRana
 
 
@@ -312,6 +313,24 @@ CarZoneCollision:
 .nocoll
 	rts
 
+
+CheckForDragging:
+	move.w	DraggingDirection,d0
+	tst.w	d0
+	beq.s	.exit
+
+	cmpi.w	#1,d0 
+	bne.s	.destra
+	subi.w	#1,RanaX
+	rts
+
+.destra
+	addi.w	#1,RanaX
+	rts
+
+.exit
+	rts
+
 ; Nel caso dell'acqua, la collisione la devo controllare solo se la rana ha finito di saltare, ovvero è in stato idle (0)
 ; in quel caso si verificano due scenari
 ; 1: Non c'è collisione con nulla => E' finita in acqua e muore
@@ -332,6 +351,7 @@ WaterZoneCollision:
 .coll
 
 	bsr.w	FindAttachedDirection
+	move.w	d2,DraggingDirection
 
 	cmpi.w	#3,d2
 	bne.s	.destra
@@ -583,6 +603,8 @@ CheckInput:
 	cmpi.w	#2,RanaState	; Anche se sta esplodendo
 	beq.w	.exit
 
+	
+
     move.w  $dff00c,d3
     btst.l  #1,d3       ; Bit 1 (destra) è azzerato?
     beq.s   .nodestra   ; Se si salto lo spostamento a destra
@@ -592,6 +614,8 @@ CheckInput:
 
     move.w	#3,RanaOrientation	; Destra
 	move.w	#1,RanaState
+
+	move.w	#0,DraggingDirection	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
@@ -605,6 +629,8 @@ CheckInput:
 
 	move.w	#2,RanaOrientation	; Sinistra
 	move.w	#1,RanaState
+
+	move.w	#0,DraggingDirection	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
@@ -621,6 +647,8 @@ CheckInput:
     move.w	#0,RanaOrientation	; Su
 	move.w	#1,RanaState
 
+	move.w	#0,DraggingDirection	; Disattivo il dragging
+
 	bsr.w	PlayCra
 
     rts
@@ -633,6 +661,8 @@ CheckInput:
 
 	move.w	#1,RanaOrientation	; Su
 	move.w	#1,RanaState
+
+	move.w	#0,DraggingDirection	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
@@ -1505,11 +1535,16 @@ Livello1:
 	dc.l	0
 
 ; Y rana
-; Direction     (3 left, 4 right)
+; Direction     (1 left, 2 right)
 Directions:
-    dc.w    114,3
-    dc.w    93,4
-    dc.w    72,4
-    dc.w    51,4
+    dc.w    114,1
+    dc.w    93,2
+    dc.w    72,2
+    dc.w    51,2
     dc.w    $ffff
 
+; 0 no dragging
+; 1 left
+; 2 right
+DraggingDirection:
+	dc.w	0
