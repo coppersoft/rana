@@ -315,18 +315,11 @@ CarZoneCollision:
 
 
 CheckForDragging:
-	move.w	DraggingDirection,d0
+	move.w	DraggingSpeed,d0
 	tst.w	d0
 	beq.s	.exit
 
-	cmpi.w	#1,d0 
-	bne.s	.destra
-	subi.w	#1,RanaX
-	rts
-
-.destra
-	addi.w	#1,RanaX
-	rts
+	add.w	d0,RanaX
 
 .exit
 	rts
@@ -350,24 +343,16 @@ WaterZoneCollision:
 
 .coll
 
-	bsr.w	FindAttachedDirection
-	move.w	d2,DraggingDirection
+	bsr.w	FindAttachedSpeed
+	move.w	d2,DraggingSpeed
 
-	cmpi.w	#3,d2
-	bne.s	.destra
-	move.w	#$0fff,$dff180
-	rts
-.destra
-	move.w	#$0f00,$dff180
 .exit
 	rts
 
-; Routine ultra semplificata per stabilire a cosa la rana si è attaccata, trova il primo oggetto
-; (tronco o tartaruga) che abbia una posizione Y iniziale e finale che comprende la Y centrale della rana
-; e ne recupera la direzione
 
-; Restituisce in d2 stato 3 se è attaccato direzione sinistra, 4 se è attaccato direzione destra
-FindAttachedDirection:
+
+; Restituisce in d2 la velocità dell'oggetto a cui è attaccata
+FindAttachedSpeed:
     lea     Directions,a0
     move.w  RanaY,d0
 
@@ -391,6 +376,7 @@ KillRana:
 	move.w	#2,RanaState
 	move.w	#0,RanaSpritePointer+2
 	move.w	#0,RanaSpritePointer+6
+	move.w	#0,DraggingSpeed
 	bsr.w	PlayBoom
 	rts
 
@@ -647,7 +633,7 @@ CheckInput:
     move.w	#0,RanaOrientation	; Su
 	move.w	#1,RanaState
 
-	move.w	#0,DraggingDirection	; Disattivo il dragging
+	move.w	#0,DraggingSpeed	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
@@ -662,7 +648,7 @@ CheckInput:
 	move.w	#1,RanaOrientation	; Su
 	move.w	#1,RanaState
 
-	move.w	#0,DraggingDirection	; Disattivo il dragging
+	move.w	#0,DraggingSpeed	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
@@ -1537,14 +1523,15 @@ Livello1:
 ; Y rana
 ; Direction     (1 left, 2 right)
 Directions:
-    dc.w    114,1
-    dc.w    93,2
-    dc.w    72,2
-    dc.w    51,2
+	dc.w	51,1
+	dc.w	72,2
+	dc.w	93,1
+	dc.w	114,-1
+
+
     dc.w    $ffff
 
-; 0 no dragging
-; 1 left
-; 2 right
-DraggingDirection:
+
+
+DraggingSpeed:
 	dc.w	0
