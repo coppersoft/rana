@@ -615,7 +615,7 @@ CheckInput:
     move.w	#3,RanaOrientation	; Destra
 	move.w	#1,RanaState
 
-	move.w	#0,DraggingDirection	; Disattivo il dragging
+	;move.w	#0,DraggingDirection	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
@@ -630,7 +630,7 @@ CheckInput:
 	move.w	#2,RanaOrientation	; Sinistra
 	move.w	#1,RanaState
 
-	move.w	#0,DraggingDirection	; Disattivo il dragging
+	;move.w	#0,DraggingDirection	; Disattivo il dragging
 
 	bsr.w	PlayCra
 
