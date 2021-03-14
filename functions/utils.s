@@ -126,12 +126,11 @@ ShowLifes:
 
 ; Routine per la stampa del punteggio
 ; CPU based, non blitter
-ScoreStart = ((background_margin*2)+40)*5+20
+ScoreStart = ((((background_margin*2)+40)*5)*6)+7
 
 DrawScore:
 
-;    move.w  Score,d0
-    move.w  RanaY,d0
+    move.w  Score,d0
     lea     ScoreStr,a0
 
     bsr.w   DecToStr            ; Converto il valore decimale in stringa
@@ -213,3 +212,134 @@ Fade:
 	addq.w	#4,a1
 	dbra	d1,Fade
 	rts
+
+; -------
+
+framesPerStripPixel=25
+maxStrip=32
+
+HandleTimeStrip:
+
+    cmpi.w  #maxStrip,TimeStripCounter
+    bne.s   .nonmuore
+
+    bsr.w   KillRana
+    rts
+
+
+.nonmuore
+
+	move.l	draw_buffer,a0
+	add.l	#time_strip_start,a0
+
+    lea     TimeStrip,a1
+
+    move.l  #0,d0
+
+    move.w  TimeStripCounter,d0
+    lsl.w   #2,d0
+    add.w   d0,a1
+
+; Prima riga
+	move.l	(a1),(a0)
+	add.l	#(20+40),a0
+	move.l	#$00000000,(a0)
+	add.l	#(20+40),a0
+	move.l	#$00000000,(a0)
+	add.l	#(20+40),a0
+	move.l	(a1),(a0)
+	add.l	#(20+40),a0
+	move.l	(a1),(a0)
+
+; Seconda riga
+	add.l	#(20+40),a0
+	move.l	(a1),(a0)
+	add.l	#(20+40),a0
+	move.l	#$00000000,(a0)
+	add.l	#(20+40),a0
+	move.l	#$00000000,(a0)
+	add.l	#(20+40),a0
+	move.l	(a1),(a0)
+	add.l	#(20+40),a0
+	move.l	(a1),(a0)
+
+    tst.w   TimeFrameCounter            ; Il contatore dei frame per la singole lunghezza della barra è a 0?
+    bne.s   .nonscende                  ; Se no, non scende
+
+    addq.w  #1,TimeStripCounter
+    move.w  #framesPerStripPixel,TimeFrameCounter
+
+
+.nonscende
+    subq.w  #1,TimeFrameCounter
+
+
+
+    rts
+
+DrawCollision:
+	move.w	#0,d0
+    move.w  $dff00e,d3
+    btst.l  #4,d3
+    beq.s   .nocoll
+	move.w	#$ffff,d0
+
+.nocoll
+	move.l	draw_buffer,a0
+	move.w	d0,(a0)
+	add.l	#(20+40),a0
+	move.l	#$00000000,(a0)
+	add.l	#(20+40),a0
+	move.l	#$00000000,(a0)
+	add.l	#(20+40),a0
+	move.w	d0,(a0)
+	add.l	#(20+40),a0
+	move.w	d0,(a0)
+	rts
+
+TimeStrip:
+
+	dc.l	$ffffffff
+	dc.l	$fffffffe
+	dc.l	$fffffffc
+	dc.l	$fffffff8
+	dc.l	$fffffff0
+	dc.l	$ffffffe0
+	dc.l	$ffffffc0
+	dc.l	$ffffff80
+	dc.l	$ffffff00
+	
+	dc.l	$fffffe00
+	dc.l	$fffffc00
+	dc.l	$fffff800
+	dc.l	$fffff000
+	dc.l	$ffffe000
+	dc.l	$ffffc000
+	dc.l	$ffff8000
+	dc.l	$ffff0000
+	
+	dc.l	$fffe0000
+	dc.l	$fffc0000
+	dc.l	$fff80000
+	dc.l	$fff00000
+	dc.l	$ffe00000
+	dc.l	$ffc00000
+	dc.l	$ff800000
+	dc.l	$ff000000
+	
+	dc.l	$fe000000
+	dc.l	$fc000000
+	dc.l	$f8000000
+	dc.l	$f0000000
+	dc.l	$e0000000
+	dc.l	$c0000000
+	dc.l	$80000000
+	dc.l	$00000000
+
+; Conta il numero dei frame prima che la barra del tempo scenda di un pixel
+TimeFrameCounter:
+	dc.w	framesPerStripPixel
+
+; Lunghezza della barra del tempo (al contrario)
+TimeStripCounter:
+	dc.w	0

@@ -80,7 +80,7 @@ BlitBob16:
 ; d4    Numero bitplane
 
 BlitBob:
-    movem.l d5-d7,-(SP)
+    movem.l d0-d7/a0-a3,-(SP)
 
     tst     $dff002
 .waitblit
@@ -141,7 +141,7 @@ BlitBob:
     add.w   d2,d3
     move.w  d3,$dff058                   ; Setto le dimensioni e lancio la blittata
 
-    movem.l (SP)+,d5-d7
+    movem.l (SP)+,d0-d7/a0-a3
 
     rts
 

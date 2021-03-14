@@ -40,7 +40,13 @@ ranaY_start	= 240
 jump_length_vert = 21
 jump_length_horiz = 16
 
+; Margini Y
 car_zone_y_margin=240-(7*16)
+touchdown_y=30
+
+rasterline=((background_margin*2)+40)
+
+time_strip_start=((rasterline*5)*11)+35
 
 ; ===== INIZIO CODICE 
 
@@ -98,12 +104,12 @@ START:
     move.l	BaseVBR,a4          ; BaseVBR recuperato, se necessario, in init.s
 	move.l	#INTERRUPT,$6c(a4)	; Punto il mio interrupt
 
-
+	; ATTENZIONE!!!
+	; PRIMA copio lo sfondo e punto i bitplane, DOPO faccio puntare la copperlist
+	; onde evitare di visualizzare frame sporchi
+    bsr.w   CopiaSfondo
+	bsr.w	SwitchBuffers
  
-
-
-
-
     ; Setto la copperlist
 
     move.l  #Copper,$dff080     ; http://amiga-dev.wikidot.com/hardware:cop1lch  (Copper pointer register) E' un long word move perché il registro è una long word
@@ -180,35 +186,10 @@ InitLevel:
 
 .iniziogioco
 
-    bsr.w   CopiaSfondo
+
 ;    bsr.w   ShowLifes
 
-;    bsr.w   DrawScore
-
-; Prova blitting
-
-;	lea		Tronco1,a0
-;	lea		Tronco1_mask,a1
-;	move.l	draw_buffer_bob,a2
-
-;	move.w	#32,d0
-;	move.w	#0,d1
-;	move.w	#(64/16),d2
-;	move.w	#16,d3
-;	move.w	#5,d4
-
-;	bsr.w	BlitBob
-
-
-; fine prova blitting
-
-
-
-;	move.w	#50,d0
-;	move.w	#50,d1
-;	move.w	#5,d5
-;	bsr.w	ShowExplosionFrame
-
+    bsr.w   DrawScore
 
 
 
@@ -216,7 +197,9 @@ InitLevel:
 
     move.l  #0,d0
 
-
+	; Non so per quale arcano motivo, ma la prima lettura di clxdat mi da una collisione
+	; errata, lo leggo una volta a vuoto.
+	move.w  $dff00e,d3
 
 mainloop:
 
@@ -234,39 +217,31 @@ mainloop:
 
 .nofadein:
 
-	bsr.w	DrawScore
+	bsr.w	HandleTimeStrip
 
-    bsr.w   CheckSoundStop
-
-    bsr.w   SwitchBuffers
-	bsr.w   wframe
-
-
-
-; Inizio prova movimento
+	bsr.w	UpdateBobPositions
+    bsr.w	DrawBobs
+	
 
     bsr.w   CheckInput
 	bsr.w	UpdateRanaPosition
 	bsr.w	CheckForDragging
-    bsr.w	DrawRana
 
-
-; Fine prova movimento
-
-; Inizio test collisioni
-  
 	bsr.w	CheckCollisions
-
-; Fine test collisioni
+	bsr.w	CheckMargin
 
 	bsr.w	HandleExplosionAnimation
 
-; Disegno bob
-	
+	bsr.w	DrawRana
 
-	bsr.w	DrawBobs
-	bsr.w	UpdateBobPositions
-    
+    bsr.w   SwitchBuffers
+	bsr.w   wframe
+
+	; Lo stato delle collisioni è sempre meglio prenderlo UNA volta dopo il waitvbl
+	move.w	$dff00e,CollisionBuffer
+
+	bsr.w   CheckSoundStop
+
     btst    #6,$bfe001
     bne     mainloop
 
@@ -305,11 +280,13 @@ CheckCollisions:
 
 
 CarZoneCollision:
-    move.w  $dff00e,d3
+
+    move.w  CollisionBuffer,d3
     btst.l  #4,d3
     beq.s   .nocoll
 
-    bsr.w	KillRana
+	bsr.w	KillRana
+
 .nocoll
 	rts
 
@@ -331,12 +308,16 @@ CheckForDragging:
 WaterZoneCollision:
 
 	cmpi.w	#0,RanaState
-	bne.s	.exit
+	bne.w	.exit
 
-	move.w	$dff00e,d3
+	move.w	CollisionBuffer,d3
+
+	cmpi.w	#touchdown_y,RanaY	; E' arrivata nella zona traguardo?
+	beq.s	.touchdown
+
 	btst.l	#4,d3
-	beq.s	.nocoll
-	bra.s	.coll
+	beq.s	.nocoll		; E' caduta in acqua e muore.
+	bra.s	.coll		; Si è aggrappata a qualcosa
 .nocoll
 	bsr.w	KillRana
 	rts
@@ -345,10 +326,62 @@ WaterZoneCollision:
 
 	bsr.w	FindAttachedSpeed
 	move.w	d2,DraggingSpeed
+	rts
+
+.touchdown
+	btst.l	#4,d3
+	beq.s	.traguardo		; Se non ha toccato niente, allora ha raggiunto il traguardo
+	bsr.w	KillRana	; Altrimenti ha sbattuto sui bordi e muore
+	rts
+
+.traguardo
+
+	lea		TouchdownAreas,a0
+	move.w	RanaX,d1
+.loopareas
+	move.w	(a0),d0
+	sub.w	d1,d0
+	bpl.b	.positivo
+	neg.w	d0
+.positivo
+	cmp.w	#3,d0
+	ble.s	.found
+	addq.w	#2,a0
+	bra.s	.loopareas
+
+.found
+	move.w	(a0),d0
+	addi.w	#81,d0
+
+; in entrambi i buffer
+
+	lea		WinnerRana,a0
+	lea		WinnerRana_mask,a1
+	move.l	draw_buffer_bob,a2
+	lea		Background,a3
+
+	move.w	#touchdown_y,d1
+	move.w	#2,d2
+	move.w	#16,d3
+	move.w	#5,d4
+	bsr.w	BlitBob
+
+	move.l	view_buffer_bob,a2
+	bsr.w	BlitBob
+
+	addi.w	#100,Score
+	bsr.w	DrawScore
+
+	bsr.w	ResetRana
+
+	bsr.w	PlayWin
 
 .exit
 	rts
 
+; --------------
+
+DrawHappyRana:
 
 
 ; Restituisce in d2 la velocità dell'oggetto a cui è attaccata
@@ -369,18 +402,35 @@ FindAttachedSpeed:
 .exit
     rts
 
-	
-
-
 KillRana:
 	move.w	#2,RanaState
 	move.w	#0,RanaSpritePointer+2
 	move.w	#0,RanaSpritePointer+6
 	move.w	#0,DraggingSpeed
+	move.w  #0,TimeStripCounter
+    move.w  #framesPerStripPixel,TimeFrameCounter
 	bsr.w	PlayBoom
 	rts
 
 ; -------------
+
+ResetRana:
+	move.w	#0,ExplosionSxSpritePointer+2	; Se si disattivo lo sprite...
+	move.w	#0,ExplosionSxSpritePointer+6
+	move.w	#0,ExplosionDxSpritePointer+2
+	move.w	#0,ExplosionDxSpritePointer+6
+
+	move.w	#0,ExplosionActualFrame			; Resetto il contatore del frame
+
+	move.w	#0,RanaState					; Riattivo la rana in idle
+	move.w	#ranaX_start,RanaX
+	move.w	#ranaY_start,RanaY
+	move.w	#0,RanaOrientation
+	move.w	#0,JumpFrame
+	move.w  #0,TimeStripCounter
+    move.w  #framesPerStripPixel,TimeFrameCounter
+	rts
+
 
 HandleExplosionAnimation:
 
@@ -396,18 +446,8 @@ HandleExplosionAnimation:
 	cmpi.w	#$ffff,d5		; E' alla fine dell'animazione?
 	bne.s	.goanim
 
-	move.w	#0,ExplosionSxSpritePointer+2	; Se si disattivo lo sprite...
-	move.w	#0,ExplosionSxSpritePointer+6
-	move.w	#0,ExplosionDxSpritePointer+2
-	move.w	#0,ExplosionDxSpritePointer+6
+	bsr.w	ResetRana
 
-	move.w	#0,ExplosionActualFrame			; Resetto il contatore del frame
-
-	move.w	#0,RanaState					; Riattivo la rana in idle
-	move.w	#ranaX_start,RanaX
-	move.w	#ranaY_start,RanaY
-	move.w	#0,RanaOrientation
-	move.w	#0,JumpFrame
 	bra.s	.exit
 
 .goanim:
@@ -575,6 +615,25 @@ UpdateBobPositions:
 
 .exit
 	rts
+
+; ------------------------------
+CheckMargin:
+	cmpi.w	#2,RanaState		; se già sta esplodendo non controllo
+	beq.s	.exit
+
+	cmpi.w	#320-8,RanaX		; Se è al margine destro non salta
+	bge.w	.kill 
+
+	cmpi.w	#-8,RanaX
+	ble.w	.kill
+
+.exit
+	rts
+
+.kill
+	bsr.w	KillRana
+	rts
+
 
 
 
@@ -973,9 +1032,12 @@ Cra:
     incbin  "sfx/cra_11025.raw"
 
 Boom:
-	incbin	"sfx/Explosion.raw"	
+	incbin	"sfx/Explosion.raw"
+
+Win:
+	incbin	"sfx/win.raw"
 Silent:
-    dcb.w   100
+    dcb.w   1024
 SoundStarted:
     dc.w    0
 
@@ -1180,18 +1242,53 @@ Tronco2:
 	incbin	"gfx/Tronco2.raw"
 Tronco2_mask:
 	incbin	"gfx/Tronco2_mask.raw"
-AutoBlu:
-	incbin	"gfx/AutoBlu.raw"
-AutoBlu_mask:
-	incbin	"gfx/AutoBlu_mask.raw"
-Furgone:
-	incbin	"gfx/Furgone.raw"
-Furgone_mask:
-	incbin	"gfx/Furgone_mask.raw"
+AutoBluSx:
+	incbin	"gfx/AutoBluSx.raw"
+AutoBluSx_mask:
+	incbin	"gfx/AutoBluSx_mask.raw"
+FurgoneSx:
+	incbin	"gfx/FurgoneSx.raw"
+FurgoneSx_mask:
+	incbin	"gfx/FurgoneSx_mask.raw"
+
+AutoBluDx:
+	incbin	"gfx/AutoBluDx.raw"
+AutoBluDx_mask:
+	incbin	"gfx/AutoBluDx_mask.raw"
+FurgoneDx:
+	incbin	"gfx/FurgoneDx.raw"
+FurgoneDx_mask:
+	incbin	"gfx/FurgoneDx_mask.raw"
+
+RoverSx:
+	incbin	"gfx/RoverSx.raw"
+RoverSx_mask:
+	incbin	"gfx/RoverSx_mask.raw"
+RoverDx:
+	incbin	"gfx/RoverDx.raw"
+RoverDx_mask:
+	incbin	"gfx/RoverDx_mask.raw"
+
+AutoArancioneSx:
+	incbin	"gfx/AutoArancioneSx.raw"
+AutoArancioneSx_mask:
+	incbin	"gfx/AutoArancioneSx_mask.raw"
+AutoArancioneDx:
+	incbin	"gfx/AutoArancioneDx.raw"
+AutoArancioneDx_mask:
+	incbin	"gfx/AutoArancioneDx_mask.raw"
+
+
 Buggy:
 	incbin	"gfx/Buggy.raw"
 Buggy_mask:
 	incbin	"gfx/Buggy_mask.raw"
+
+WinnerRana:
+	incbin	"gfx/WinnerRana.raw"
+WinnerRana_mask:
+	incbin	"gfx/WinnerRana_mask.raw"
+
 
 ; Tartaruga
 Turtle:
@@ -1305,32 +1402,61 @@ Livello1:
 
 ; Riga 2
 
-	dc.l	Tronco1			; Indirizzo bob
-	dc.l	Tronco1_mask	; Indirizzo bobmask
-	dc.w	(64/16)			; Larghezza in word
-	dc.w	2				; Velocità
-	dc.w	0				; x
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	10		; x
 	dc.w	70				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.l	NormalTurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	10+36	; x
+	dc.w	70				; y
+	dc.l	NormalTurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	10+36+36	; x
+	dc.w	70				; y
+	dc.l	NormalTurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
 
-	dc.l	Tronco2			; Indirizzo bob
-	dc.l	Tronco2_mask	; Indirizzo bobmask
-	dc.w	(96/16)			; Larghezza in word
-	dc.w	2				; Velocità
-	dc.w	64				; x
+
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	10+64+96+96		; x
 	dc.w	70				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.l	TurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	Tronco1			; Indirizzo bob
-	dc.l	Tronco1_mask	; Indirizzo bobmask
-	dc.w	(64/16)			; Larghezza in word
-	dc.w	2				; Velocità
-	dc.w	64+96+96		; x
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word;
+	dc.w	-1				; Velocità
+	dc.w	10+64+96+96+36	; x
 	dc.w	70				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.l	TurtleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	Turtle			; Indirizzo bob
+	dc.l	Turtle_mask		; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	-1				; Velocità
+	dc.w	10+64+96+96+36+36	; x
+	dc.w	70				; y
+	dc.l	TurtleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
 ; Riga 3
@@ -1431,8 +1557,8 @@ Livello1:
 
 ; Riga 1 automobili
 
-	dc.l	Furgone			; Indirizzo bob
-	dc.l	Furgone_mask	; Indirizzo bobmask
+	dc.l	FurgoneSx			; Indirizzo bob
+	dc.l	FurgoneSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	320				; x
@@ -1440,8 +1566,8 @@ Livello1:
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	AutoBlu			; Indirizzo bob
-	dc.l	AutoBlu_mask	; Indirizzo bobmask
+	dc.l	AutoBluSx			; Indirizzo bob
+	dc.l	AutoBluSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	160				; x
@@ -1450,8 +1576,8 @@ Livello1:
 	dc.w	0				; Fotogramma attuale
 
 
-	dc.l	Furgone			; Indirizzo bob
-	dc.l	Furgone_mask	; Indirizzo bobmask
+	dc.l	FurgoneSx			; Indirizzo bob
+	dc.l	FurgoneSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	100				; x
@@ -1459,8 +1585,8 @@ Livello1:
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	AutoBlu			; Indirizzo bob
-	dc.l	AutoBlu_mask	; Indirizzo bobmask
+	dc.l	AutoArancioneSx			; Indirizzo bob
+	dc.l	AutoArancioneSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	50				; x
@@ -1470,51 +1596,87 @@ Livello1:
 
 ; Riga 2 autobili
 
-	dc.l	Buggy			; Indirizzo bob
-	dc.l	Buggy_mask	; Indirizzo bobmask
-	dc.w	(48/16)			; Larghezza in word
-	dc.w	-4				; Velocità
-	dc.w	50				; x
-	dc.w	190				; y
-	dc.l	SingleFrameList	; Lista fotogrammi
-	dc.w	0				; Fotogramma attuale
+;	dc.l	Buggy			; Indirizzo bob
+;	dc.l	Buggy_mask	; Indirizzo bobmask
+;	dc.w	(48/16)			; Larghezza in word
+;	dc.w	-4				; Velocità
+;	dc.w	50				; x
+;	dc.w	190				; y
+;	dc.l	SingleFrameList	; Lista fotogrammi
+;	dc.w	0				; Fotogramma attuale
+
+	dc.l	RoverDx
+	dc.l	RoverDx_mask
+	dc.w	(48/16)
+	dc.w	1
+	dc.w	50
+	dc.w	190
+	dc.l	SingleFrameList
+	dc.w	0
+
+	dc.l	AutoBluDx
+	dc.l	AutoBluDx_mask
+	dc.w	(48/16)
+	dc.w	1
+	dc.w	100
+	dc.w	190
+	dc.l	SingleFrameList
+	dc.w	0
+
+	dc.l	AutoArancioneDx
+	dc.l	AutoArancioneDx_mask
+	dc.w	(48/16)
+	dc.w	1
+	dc.w	150
+	dc.w	190
+	dc.l	SingleFrameList
+	dc.w	0
+
+	dc.l	RoverDx
+	dc.l	RoverDx_mask
+	dc.w	(48/16)
+	dc.w	1
+	dc.w	200
+	dc.w	190
+	dc.l	SingleFrameList
+	dc.w	0
 
 ; Riga 3 autobili
 
-	dc.l	Furgone			; Indirizzo bob
-	dc.l	Furgone_mask	; Indirizzo bobmask
+	dc.l	FurgoneSx			; Indirizzo bob
+	dc.l	FurgoneSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
 	dc.w	40				; x
-	dc.w	210				; y
+	dc.w	220				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	AutoBlu			; Indirizzo bob
-	dc.l	AutoBlu_mask	; Indirizzo bobmask
+	dc.l	AutoBluSx			; Indirizzo bob
+	dc.l	AutoBluSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
-	dc.w	90				; x
-	dc.w	210				; y
+	dc.w	110				; x
+	dc.w	220				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
 
-	dc.l	Furgone			; Indirizzo bob
-	dc.l	Furgone_mask	; Indirizzo bobmask
+	dc.l	FurgoneSx			; Indirizzo bob
+	dc.l	FurgoneSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
-	dc.w	140				; x
-	dc.w	210				; y
+	dc.w	180				; x
+	dc.w	220				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
-	dc.l	AutoBlu			; Indirizzo bob
-	dc.l	AutoBlu_mask	; Indirizzo bobmask
+	dc.l	AutoArancioneSx			; Indirizzo bob
+	dc.l	AutoArancioneSx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
 	dc.w	-1				; Velocità
-	dc.w	200				; x
-	dc.w	210				; y
+	dc.w	250				; x
+	dc.w	220				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
 
@@ -1524,14 +1686,21 @@ Livello1:
 ; Direction     (1 left, 2 right)
 Directions:
 	dc.w	51,1
-	dc.w	72,2
+	dc.w	72,-1
 	dc.w	93,1
 	dc.w	114,-1
-
-
     dc.w    $ffff
 
+TouchdownAreas:
+	dc.w	11
+	dc.w	81
+	dc.w	151
+	dc.w	221
+	dc.w	291
 
 
 DraggingSpeed:
+	dc.w	0
+
+CollisionBuffer:
 	dc.w	0

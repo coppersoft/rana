@@ -86,6 +86,7 @@ exit:
     move.l  BaseVBR,a0
     move.l  OldInt6c,$6c(a0)    ; Ripristino il vecchio interrupt
 
+    move.w  #%0000000000001000,$dff096      ; DMA audio 3 inattivo in DMACON
 
     moveq   #0,d0               ; No error code al sistema operativo
 
