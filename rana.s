@@ -448,6 +448,8 @@ HandleExplosionAnimation:
 	cmpi.w	#$ffff,d5		; E' alla fine dell'animazione?
 	bne.s	.goanim
 
+	subq.w	#1,Lifes
+	bsr.w	ShowLifes
 	bsr.w	ResetRana
 
 	bra.s	.exit
