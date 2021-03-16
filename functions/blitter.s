@@ -292,7 +292,7 @@ lifeoffset = 16
 
     move.w  #(16*5*64)+1,$dff058         ; BLTSIZE
 
-    addq.w  #2,d1
+    addq.w  #4,d1
     dbra    d0,.lifesloop
 
 .nessunavita
