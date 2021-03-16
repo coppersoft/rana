@@ -201,6 +201,8 @@ InitLevel:
 	; errata, lo leggo una volta a vuoto.
 	move.w  $dff00e,d3
 
+	bsr.w	ShowLifes
+
 mainloop:
 
 ; Fade in ingame
@@ -988,7 +990,7 @@ Background:
 Digits:
     incbin "gfx/Digits.raw"
 Life:
-    incbin "gfx/Life.raw"
+    incbin "gfx/LifeRana.raw"
 
 
 GameLevel:

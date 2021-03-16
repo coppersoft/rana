@@ -234,6 +234,8 @@ CopiaSfondo:
 ; a0    buffer dove scrivere
 DrawLifes:
 
+lifeoffset = 16
+
     move.l  a0,a1       ; me lo salvo per dopo
 
     tst     $dff002
@@ -241,18 +243,20 @@ DrawLifes:
     btst    #14-8,$dff002
     bne.s   .waitblit           ; Aspetto il blitter che finisce
 
+
+
 ; Prima pulisco lo sfondo del visualizzatore vite rimaste
 
-    add.l  #(8*44*5)+2,a0      ; riga 8 seconda word  
+    add.l  #lifeoffset,a0      ; riga 8 seconda word  
 
 ; Cancellazione, quindi shift nullo e solo canale D di destinazione, minterm a 0
     move.l  #$01000000,$dff040
     move.l  #$ffffffff,$dff044      ; maschera
 
     move.l  a0,$dff054
-    move.w  #(44-6),$dff066     ; Modulo canale D, salto 3 word
+    move.w  #(rasterline-6),$dff066     ; Modulo canale D, salto 3 word
 
-    move.w  #(10*5*64)+3,$dff058        ; BLTSIZE
+    move.w  #(16*5*64)+3,$dff058        ; BLTSIZE
 
 ; Copio il numero di vite
 
@@ -274,7 +278,7 @@ DrawLifes:
 
     move.l  a1,a0
 
-    add.l   #(8*44*5)+2,a0      ; riga 8 seconda word
+    add.l   #lifeoffset,a0      ; riga 8 seconda word
   
     add.l   d1,a0               
 
@@ -284,9 +288,9 @@ DrawLifes:
     move.l  a0,$dff054          ; Destinazione in BLTPTH
 
     move.w  #0,$dff064          ; Modulo 0 per la sorgente
-    move.w  #42,$dff066         ; Modulo 42 byte per la destinazione
+    move.w  #rasterline-2,$dff066         ; Modulo 42 byte per la destinazione
 
-    move.w  #(10*5*64)+1,$dff058         ; BLTSIZE
+    move.w  #(16*5*64)+1,$dff058         ; BLTSIZE
 
     addq.w  #2,d1
     dbra    d0,.lifesloop
