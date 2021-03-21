@@ -203,6 +203,31 @@ InitLevel:
 
 	bsr.w	ShowLifes
 
+
+; Prova mosca
+	lea     MoscaSpritePointer,a0
+	lea		MoscaSprite,a1
+    move.l  a1,d0
+
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
+
+; a1    Indirizzo dello sprite
+; d0    Posizione verticale
+; d1    Posizione orizzontale
+; d2    Altezza
+	lea		MoscaSprite,a1
+	move.w	#100,d0
+	move.w	#100,d1
+	move.w	#9,d2
+	bsr.w	PointSprite
+
+; Fine prova mosca
+
+
+
+
 mainloop:
 
 ; Fade in ingame
@@ -914,6 +939,7 @@ Palette:
 	dc.w $122,0
 	dc.w $124,0     ;1
 	dc.w $126,0
+MoscaSpritePointer:
 	dc.w $128,0     ;2
 	dc.w $12a,0
 	dc.w $12c,0     ;3
@@ -1217,6 +1243,23 @@ RanaSpriteRightJumping:
 	dc.w	$607e,$0000
 
     dc.w 0,0
+
+; Mosca
+MoscaSprite:
+	dc.w	$0000,$0000
+	dc.w	$0000,$03c0
+	dc.w	$0000,$0780
+	dc.w	$e1c0,$0e00
+	dc.w	$c3e0,$3c00
+	dc.w	$03e0,$7c00
+	dc.w	$c3e0,$3c00
+	dc.w	$e1c0,$0e00
+	dc.w	$0000,$0780
+	dc.w	$0000,$03c0
+	dc.w	$0000,$0000
+
+
+
 
 ; Esplosione
 
