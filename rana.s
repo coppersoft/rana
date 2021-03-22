@@ -218,8 +218,8 @@ InitLevel:
 ; d1    Posizione orizzontale
 ; d2    Altezza
 	lea		MoscaSprite,a1
-	move.w	#100,d0
-	move.w	#100,d1
+	move.w	#32,d0			; y
+	move.w	#11+3,d1			; x
 	move.w	#9,d2
 	bsr.w	PointSprite
 
@@ -262,6 +262,9 @@ mainloop:
 	bsr.w	DrawRana
 
     bsr.w   SwitchBuffers
+
+	bsr.w	CheckFlyCollision
+
 	bsr.w   wframe
 
 	; Lo stato delle collisioni è sempre meglio prenderlo UNA volta dopo il waitvbl
@@ -290,6 +293,17 @@ mainloop:
 	
 
 ; *************** INIZIO ROUTINE UTILITY
+
+CheckFlyCollision:
+	move.w	CollisionBuffer,d0
+	btst.l	#13,d0
+	beq.s	.nocoll
+
+	move.w	#$0f00,$dff180
+
+.nocoll
+	rts
+
 
 
 CheckCollisions:
@@ -1247,18 +1261,29 @@ RanaSpriteRightJumping:
 ; Mosca
 MoscaSprite:
 	dc.w	$0000,$0000
-	dc.w	$0000,$03c0
-	dc.w	$0000,$0780
-	dc.w	$e1c0,$0e00
-	dc.w	$c3e0,$3c00
-	dc.w	$03e0,$7c00
-	dc.w	$c3e0,$3c00
-	dc.w	$e1c0,$0e00
-	dc.w	$0000,$0780
-	dc.w	$0000,$03c0
+	dc.w	$0000,$03e0
+	dc.w	$0000,$07c0
+	dc.w	$e0e0,$0f00
+	dc.w	$c1f0,$3e00
+	dc.w	$03f0,$7c00
+	dc.w	$c1f0,$3e00
+	dc.w	$e0e0,$0f00
+	dc.w	$0000,$07c0
+	dc.w	$0000,$03e0
 	dc.w	$0000,$0000
 
-
+CinquecentoPunti:
+	dc.w	$0000,$0000
+	dc.w	$0000,$f318
+	dc.w	$7318,$84a4
+	dc.w	$0000,$84a4
+	dc.w	$0000,$e4a4
+	dc.w	$e000,$14a4
+	dc.w	$0000,$14a4
+	dc.w	$0000,$94a4
+	dc.w	$94a4,$6318
+	dc.w	$6318,$0000
+	dc.w	$0000,$0000
 
 
 ; Esplosione
