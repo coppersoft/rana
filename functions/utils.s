@@ -273,29 +273,29 @@ HandleTimeStrip:
 .nonscende
     subq.w  #1,TimeFrameCounter
 
-
-
     rts
 
-DrawCollision:
-	move.w	#0,d0
-    move.w  $dff00e,d3
-    btst.l  #4,d3
-    beq.s   .nocoll
-	move.w	#$ffff,d0
+; ------------
 
-.nocoll
-	move.l	draw_buffer,a0
-	move.w	d0,(a0)
-	add.l	#(20+40),a0
-	move.l	#$00000000,(a0)
-	add.l	#(20+40),a0
-	move.l	#$00000000,(a0)
-	add.l	#(20+40),a0
-	move.w	d0,(a0)
-	add.l	#(20+40),a0
-	move.w	d0,(a0)
+; Banalissimo generatore di numeri casuali, semplicemente prendo la posizione verticale del
+; pennello in quel momento da VHPOSR http://amiga-dev.wikidot.com/hardware:vhposr
+PseudoRandom:
+	move.w	$dff006,d7
+	and.w	#%0000011100000000,d7
+	lsr.w	#8,d7
+
+; Mi serve da 0 a 4
+	cmpi.w	#4,d7
+	ble.s	.ok
+
+	subq.w	#4,d7
+
+.ok
+
 	rts
+
+
+; --- DATI 
 
 TimeStrip:
 

@@ -48,6 +48,9 @@ rasterline=((background_margin*2)+40)
 
 time_strip_start=((rasterline*5)*11)+35
 
+mosca_wait_time = 10		; Fotogrammi prima che appaia/scompaia una mosca in uno dei traguardi
+
+
 ; ===== INIZIO CODICE 
 
 START:
@@ -205,23 +208,23 @@ InitLevel:
 
 
 ; Prova mosca
-	lea     MoscaSpritePointer,a0
-	lea		MoscaSprite,a1
-    move.l  a1,d0
+;	lea     MoscaSpritePointer,a0
+;	lea		MoscaSprite,a1
+;    move.l  a1,d0
 
-    move.w  d0,6(a0)
-    swap    d0
-    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
+;    move.w  d0,6(a0)
+;    swap    d0
+;    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
 
 ; a1    Indirizzo dello sprite
 ; d0    Posizione verticale
 ; d1    Posizione orizzontale
 ; d2    Altezza
-	lea		MoscaSprite,a1
-	move.w	#32,d0			; y
-	move.w	#11+3,d1			; x
-	move.w	#9,d2
-	bsr.w	PointSprite
+;	lea		MoscaSprite,a1
+;	move.w	#32,d0			; y
+;	move.w	#11+3,d1			; x
+;	move.w	#9,d2
+;	bsr.w	PointSprite
 
 ; Fine prova mosca
 
@@ -265,6 +268,8 @@ mainloop:
 
 	bsr.w	CheckFlyCollision
 
+	bsr.w	HandleMosca
+
 	bsr.w   wframe
 
 	; Lo stato delle collisioni è sempre meglio prenderlo UNA volta dopo il waitvbl
@@ -302,6 +307,68 @@ CheckFlyCollision:
 	move.w	#$0f00,$dff180
 
 .nocoll
+	rts
+
+
+; -------
+
+HandleMosca:
+	tst.w	MoscaStatus
+	beq.s	.nonce							; Siamo nello stato "non c'è"?
+
+;	cmpi.w	#1,MoscaStatus					; Siamo nello stato "c'è"?
+
+	cmpi.w	#mosca_wait_time,MoscaTimer
+	bne.s	.aumenta
+
+											; Se è passato il tempo allora faccio sparire la mosca
+	move.w	#0,MoscaStatus
+	move.w	#0,MoscaTimer
+
+	move.w	#0,MoscaSpritePointer+2
+	move.w	#0,MoscaSpritePointer+6
+	rts
+
+.nonce
+	cmpi.w	#mosca_wait_time,MoscaTimer		;	E' finita l'attesa senza mosca?
+	bne.s	.aumenta
+	
+	move.w	#1,MoscaStatus					; Se è finita, allora metto la mosca in stato "c'è"
+	move.w	#0,MoscaTimer					; Azzero il timer
+
+	bsr.w	PseudoRandom					; Prendo un numero a caso tra 0 e 4 in d7
+
+	
+
+	lea     MoscaSpritePointer,a0
+	lea		MoscaSprite,a1
+	lea		TouchdownAreas,a2
+
+    move.l  a1,d0
+
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
+
+	move.l	#0,d0
+    move.w  #32,d0			; Y in d0
+
+	lsl.w	#1,d7			; Moltiplico per due il numero casuale
+	add.w	d7,a2			; E lo uso come offset per prendere la X dell'area touchdown
+
+	move.w	(a2),d1			; X in d1
+
+	addq.w	#3,d1			; lo centro
+
+;	move.w	#11+3,d1
+
+    move.w  #9,d2
+    bsr.w   PointSprite		; Lo posiziono
+
+	rts
+
+.aumenta
+	addq.w	#1,MoscaTimer
 	rts
 
 
@@ -1775,4 +1842,16 @@ DraggingSpeed:
 	dc.w	0
 
 CollisionBuffer:
+	dc.w	0
+
+; Gestione mosca
+
+MoscaTimer:
+	dc.w	0
+
+
+; 0 = Non c'è
+; 1 = C'è
+; 2 = Animazione coi punti
+MoscaStatus:
 	dc.w	0
