@@ -46,9 +46,9 @@ touchdown_y=30
 
 rasterline=((background_margin*2)+40)
 
-time_strip_start=((rasterline*5)*11)+35
+time_strip_start=((rasterline*5)*11)+35		; Posizione di inizio della striscia tempo residuo
 
-mosca_wait_time = 10		; Fotogrammi prima che appaia/scompaia una mosca in uno dei traguardi
+mosca_wait_time = 50*5		; Fotogrammi prima che appaia/scompaia una mosca in uno dei traguardi
 punti_view_time = 64		; Fotogrammi in cui viene visualizzato lo sprite con i 500 punti
 
 ; ===== INIZIO CODICE 
