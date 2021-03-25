@@ -49,7 +49,7 @@ rasterline=((background_margin*2)+40)
 time_strip_start=((rasterline*5)*11)+35
 
 mosca_wait_time = 10		; Fotogrammi prima che appaia/scompaia una mosca in uno dei traguardi
-punti_view_time = 128		; Fotogrammi in cui viene visualizzato lo sprite con i 500 punti
+punti_view_time = 64		; Fotogrammi in cui viene visualizzato lo sprite con i 500 punti
 
 ; ===== INIZIO CODICE 
 
@@ -300,13 +300,29 @@ mainloop:
 ; *************** INIZIO ROUTINE UTILITY
 
 CheckCollisionWithMosca:
+	cmpi.w	#2,MoscaStatus		; Se si sta visualizzando lo sprite con i 500 punti ovviamente salto
+	beq.s	.exit
+
 	move.w	CollisionBuffer,d0
 	btst.l	#13,d0
-	beq.s	.nocoll
+	beq.s	.exit
 
-	move.w	#$0f00,$dff180
+; Il batrace ha preso il brachicero, quindi quest'ultimo passa in stato 2 - "Animazione"
+	move.w	#2,MoscaStatus
+	move.w	#0,MoscaTimer
 
-.nocoll
+
+	lea		MoscaSpritePointer,a0
+	lea		CinquecentoPuntiSprite,a1
+
+	move.l  a1,d0
+
+    move.w  d0,6(a0)
+    swap    d0
+    move.w  d0,2(a0)		; Punto lo sprite nella copperlist, ma con la grafica dei punti
+
+
+.exit
 	rts
 
 
@@ -360,9 +376,13 @@ HandleMosca:
 
 	addq.w	#3,d1			; lo centro
 
-;	move.w	#11+3,d1
+    move.w  #9,d2			; Altezza in d2
 
-    move.w  #9,d2
+
+; Me li salvo eventualmente per muovere lo sprite 500 punti
+	move.w	d1,CinquecentoPuntiX
+	move.w	d0,CinquecentoPuntiY
+
     bsr.w   PointSprite		; Lo posiziono
 
 	rts
@@ -384,7 +404,7 @@ HandleMosca:
 
 .nonfinita
 	move.w	MoscaTimer,d5
-	lsr.w	#6,d5				; Divido per 32 il valore del timer
+	lsr.w	#2,d5				; Divido per 32 il valore del timer
 	
 	lea		CinquecentoPuntiSprite,a1
 	move.w	CinquecentoPuntiY,d0
