@@ -49,7 +49,7 @@ rasterline=((background_margin*2)+40)
 time_strip_start=((rasterline*5)*11)+35
 
 mosca_wait_time = 10		; Fotogrammi prima che appaia/scompaia una mosca in uno dei traguardi
-
+punti_view_time = 128		; Fotogrammi in cui viene visualizzato lo sprite con i 500 punti
 
 ; ===== INIZIO CODICE 
 
@@ -266,7 +266,7 @@ mainloop:
 
     bsr.w   SwitchBuffers
 
-	bsr.w	CheckFlyCollision
+	bsr.w	CheckCollisionWithMosca
 
 	bsr.w	HandleMosca
 
@@ -299,7 +299,7 @@ mainloop:
 
 ; *************** INIZIO ROUTINE UTILITY
 
-CheckFlyCollision:
+CheckCollisionWithMosca:
 	move.w	CollisionBuffer,d0
 	btst.l	#13,d0
 	beq.s	.nocoll
@@ -314,31 +314,31 @@ CheckFlyCollision:
 
 HandleMosca:
 	tst.w	MoscaStatus
-	beq.s	.nonce							; Siamo nello stato "non c'è"?
+	beq.s	.nonce							; Siamo nello stato "non c'è"? (0)
 
-;	cmpi.w	#1,MoscaStatus					; Siamo nello stato "c'è"?
+	cmpi.w	#2,MoscaStatus					; Siamo nello stato 2 - "Animazione"
+	beq.w	.animazione
 
-	cmpi.w	#mosca_wait_time,MoscaTimer
-	bne.s	.aumenta
-
-											; Se è passato il tempo allora faccio sparire la mosca
-	move.w	#0,MoscaStatus
-	move.w	#0,MoscaTimer
+; ************** Gestione stato 1 - C'è 
+	cmpi.w	#mosca_wait_time,MoscaTimer		; E' finita l'attesa con la mosca presente?
+	bne.w	.aumenta						; Se no, salto direttamente alla fase di aumento del timer
+											
+	move.w	#0,MoscaStatus					; Se è passato il tempo allora faccio sparire la mosca
+	move.w	#0,MoscaTimer					; E riporto allo stato 0 "non c'è"
 
 	move.w	#0,MoscaSpritePointer+2
 	move.w	#0,MoscaSpritePointer+6
 	rts
 
+; **************** Gestione stato 0 - Non c'è *********************
 .nonce
 	cmpi.w	#mosca_wait_time,MoscaTimer		;	E' finita l'attesa senza mosca?
-	bne.s	.aumenta
+	bne.w	.aumenta						; Se no, salto direttamente alla fase di aumento del timer
 	
 	move.w	#1,MoscaStatus					; Se è finita, allora metto la mosca in stato "c'è"
 	move.w	#0,MoscaTimer					; Azzero il timer
 
 	bsr.w	PseudoRandom					; Prendo un numero a caso tra 0 e 4 in d7
-
-	
 
 	lea     MoscaSpritePointer,a0
 	lea		MoscaSprite,a1
@@ -366,6 +366,32 @@ HandleMosca:
     bsr.w   PointSprite		; Lo posiziono
 
 	rts
+
+; ************* Gestione stato 2 - "Animazione punti"
+; In questa fase lo sprite 500 punti è già stato puntato nella copperlist e le coordinate già
+; inizializzate da CheckCollisionWithMosca
+.animazione
+	cmpi.w	#punti_view_time,MoscaTimer		; E' finita l'animazione dei punti?
+	bne.s	.nonfinita
+
+; TODO: Se è finita disattivare lo sprite e riportare lo stato mosca a 0
+
+	move.w	#0,MoscaStatus					
+	move.w	#0,MoscaTimer					
+
+	move.w	#0,MoscaSpritePointer+2
+	move.w	#0,MoscaSpritePointer+6
+
+.nonfinita
+	move.w	MoscaTimer,d5
+	lsr.w	#6,d5				; Divido per 32 il valore del timer
+	
+	lea		CinquecentoPuntiSprite,a1
+	move.w	CinquecentoPuntiY,d0
+	sub.w	d5,d0
+	move.w	CinquecentoPuntiX,d1
+	move.w	#9,d2
+	bsr.w	PointSprite
 
 .aumenta
 	addq.w	#1,MoscaTimer
@@ -1113,10 +1139,17 @@ Score:
 ScoreStr:
     dcb.b   6,0
 
+; Posizione sprite rana
 RanaX:
     dc.w    50
 RanaY:
     dc.w    50
+
+; Posizione sprite 500 punti
+CinquecentoPuntiX:
+	dc.w	0
+CinquecentoPuntiY:
+	dc.w	0
 
 ; 0: Up
 ; 1: Down
@@ -1339,7 +1372,7 @@ MoscaSprite:
 	dc.w	$0000,$03e0
 	dc.w	$0000,$0000
 
-CinquecentoPunti:
+CinquecentoPuntiSprite:
 	dc.w	$0000,$0000
 	dc.w	$0000,$f318
 	dc.w	$7318,$84a4
