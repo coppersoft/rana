@@ -267,7 +267,6 @@ mainloop:
     bsr.w   SwitchBuffers
 
 	bsr.w	CheckCollisionWithMosca
-
 	bsr.w	HandleMosca
 
 	bsr.w   wframe
@@ -311,6 +310,7 @@ CheckCollisionWithMosca:
 	move.w	#2,MoscaStatus
 	move.w	#0,MoscaTimer
 
+	addi.w	#500,Score
 
 	lea		MoscaSpritePointer,a0
 	lea		CinquecentoPuntiSprite,a1
@@ -377,7 +377,6 @@ HandleMosca:
 	addq.w	#3,d1			; lo centro
 
     move.w  #9,d2			; Altezza in d2
-
 
 ; Me li salvo eventualmente per muovere lo sprite 500 punti
 	move.w	d1,CinquecentoPuntiX
@@ -494,11 +493,12 @@ WaterZoneCollision:
 	move.w	RanaX,d1
 .loopareas
 	move.w	(a0),d0
+
 	sub.w	d1,d0
 	bpl.b	.positivo
 	neg.w	d0
 .positivo
-	cmp.w	#3,d0
+	cmp.w	#4,d0
 	ble.s	.found
 	addq.w	#2,a0
 	bra.s	.loopareas
@@ -1889,6 +1889,7 @@ TouchdownAreas:
 	dc.w	151
 	dc.w	221
 	dc.w	291
+	dc.w	$ffff
 
 
 DraggingSpeed:
