@@ -292,6 +292,28 @@ PseudoRandom:
 
 .ok
 
+; Controllo che il posto non sia già occupato da una rana
+
+.checkloop
+	move.w	d7,d6
+	lea	TouchdownAreas,a2
+	addq.w	#2,a2
+	lsl.w	#2,d6
+	add.w	d6,a2
+
+	tst.w	(a2)
+	beq.s	.ok2
+
+	cmpi.w	#4,d7
+	bne.s	.nonricomincia
+	move.w	#0,d7
+	bra.s	.checkloop
+.nonricomincia
+	addq.w	#1,d7
+	bra.s	.checkloop
+
+.ok2
+
 	rts
 
 
