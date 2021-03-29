@@ -369,7 +369,7 @@ HandleMosca:
 	move.l	#0,d0
     move.w  #32,d0			; Y in d0
 
-	lsl.w	#1,d7			; Moltiplico per due il numero casuale
+	lsl.w	#2,d7			; Moltiplico per quattro il numero casuale
 	add.w	d7,a2			; E lo uso come offset per prendere la X dell'area touchdown
 
 	move.w	(a2),d1			; X in d1
@@ -500,11 +500,13 @@ WaterZoneCollision:
 .positivo
 	cmp.w	#4,d0
 	ble.s	.found
-	addq.w	#2,a0
+;	addq.w	#2,a0			; 4 perché ora ci ho messo pure il segnaposto della vittoria
+	addq.w	#4,a0
 	bra.s	.loopareas
 
 .found
-	move.w	(a0),d0
+	move.w	(a0)+,d0		; X da popolare con la rana in d0
+	move.w	#1,(a0)			; Segno che quel posto è stato già vinto
 	addi.w	#81,d0
 
 ; in entrambi i buffer
@@ -1888,11 +1890,11 @@ Directions:
     dc.w    $ffff
 
 TouchdownAreas:
-	dc.w	11
-	dc.w	81
-	dc.w	151
-	dc.w	221
-	dc.w	291
+	dc.w	11,0
+	dc.w	81,0
+	dc.w	151,0
+	dc.w	221,0
+	dc.w	291,0
 	dc.w	$ffff
 
 
