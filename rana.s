@@ -266,7 +266,7 @@ mainloop:
 
     bsr.w   SwitchBuffers
 
-	bsr.w	CheckCollisionWithMosca
+;	bsr.w	CheckCollisionWithMosca
 	bsr.w	HandleMosca
 
 	bsr.w   wframe
@@ -529,6 +529,10 @@ WaterZoneCollision:
 	bsr.w	ResetRana
 
 	bsr.w	PlayWin
+
+; Alla fine, controllo che non si è mangiata pure la mosca
+	bsr.w	CheckCollisionWithMosca
+
 
 .exit
 	rts
