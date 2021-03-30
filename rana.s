@@ -262,6 +262,9 @@ mainloop:
 
 	bsr.w	HandleExplosionAnimation
 
+; Alla fine dell'animazione dell'esplosione viene tolta la vita, controllo che non siano finite tutte
+	bsr.w	CheckForGameOver
+
 	bsr.w	DrawRana
 
     bsr.w   SwitchBuffers
@@ -297,6 +300,40 @@ mainloop:
 	
 
 ; *************** INIZIO ROUTINE UTILITY
+
+CheckForGameOver:
+	tst.w	Lifes
+	bne.s	.exit
+
+	lea		GameOver,a0
+	lea		GameOver_mask,a1
+	move.l	draw_buffer_bob,a2
+	lea		Background,a3
+
+	move.w	#88+(background_margin*8),d0
+	move.w	#120,d1
+	move.w	#9,d2
+	move.w	#15,d3
+	move.w	#5,d4
+
+	bsr.w	BlitBob
+
+	bsr.w	SwitchBuffers
+
+	move.w	#200,d7
+
+.wait
+	bsr.w	wframe
+	dbra	d7,.wait
+
+
+.exit
+	rts
+
+
+
+
+; -----------------------------
 
 CheckCollisionWithMosca:
 	cmpi.w	#2,MoscaStatus		; Se si sta visualizzando lo sprite con i 500 punti ovviamente salto
