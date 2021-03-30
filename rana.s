@@ -1487,6 +1487,15 @@ WinnerRana:
 WinnerRana_mask:
 	incbin	"gfx/WinnerRana_mask.raw"
 
+GameOver:
+	incbin	"gfx/GameOver.raw"
+GameOver_mask:
+	incbin	"gfx/GameOver_mask.raw"
+
+LevelCleared:
+	incbin	"gfx/LevelCleared.raw"
+LevelCleared_mask:
+	incbin	"gfx/LevelCleared_mask.raw"
 
 ; Tartaruga
 Turtle:
