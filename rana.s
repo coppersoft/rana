@@ -177,6 +177,8 @@ RestartGame:
     move.w  #3,Lifes
     move.w  #1,GameLevel
     move.w  #0,Score
+	bsr.w	ResetRana
+	bsr.w	ResetTouchDowns
 
 InitLevel:
 
@@ -264,6 +266,8 @@ mainloop:
 
 ; Alla fine dell'animazione dell'esplosione viene tolta la vita, controllo che non siano finite tutte
 	bsr.w	CheckForGameOver
+	tst.w	Lifes
+	beq.w	RestartGame
 
 	bsr.w	DrawRana
 
@@ -326,6 +330,7 @@ CheckForGameOver:
 	bsr.w	wframe
 	dbra	d7,.wait
 
+	bsr.w	CopiaSfondo
 
 .exit
 	rts
@@ -626,6 +631,18 @@ ResetRana:
 	move.w	#0,JumpFrame
 	move.w  #0,TimeStripCounter
     move.w  #framesPerStripPixel,TimeFrameCounter
+	rts
+
+; --------------
+
+ResetTouchDowns:
+	lea		TouchdownAreas,a0
+	
+	move.w	#0,2(a0)
+	move.w	#0,6(a0)
+	move.w	#0,10(a0)
+	move.w	#0,14(a0)
+	move.w	#0,18(a0)
 	rts
 
 
