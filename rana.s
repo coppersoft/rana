@@ -809,8 +809,6 @@ UpdateBobPositions:
 	move.w	(a0)+,d0		; velocità in d0
 	move.w	(a0),d1			; Posizione attuale in d1
 
-
-
 	add.w	d0,d1		; sommo la velocità alla posizione attuale
 
 	cmp.w	#0,d1		; E' un numero negativo?
