@@ -175,7 +175,8 @@ START:
 
 RestartGame:
     move.w  #3,Lifes
-    move.w  #1,GameLevel
+    move.w  #0,GameLevel
+	bsr.w	SetLevel
     move.w  #0,Score
 	bsr.w	ResetRana
 	bsr.w	ResetTouchDowns
@@ -727,7 +728,7 @@ DrawBobs:
 
 ;	TODO: Sostituire con puntatore al buffer dei livelli
 ;	lea		Livello1,a4
-	move.l	LivelloAttuale,a4
+	move.l	ActualLevelPtr,a4
 
 
 	clr.l	d5
@@ -798,7 +799,7 @@ UpdateBobPositions:
 
 ;	TODO: Sostituire con puntatore al buffer dei livelli
 ;	lea		Livello1,a0
-	move.l	LivelloAttuale,a0
+	move.l	ActualLevelPtr,a0
 
 .levelLoop
 	move.l	(a0)+,d0		; Fine lista?
@@ -1208,8 +1209,6 @@ Life:
     incbin "gfx/LifeRana.raw"
 
 
-GameLevel:
-    dc.w    1
 
 
 
@@ -1611,7 +1610,15 @@ NormalTurtleFrameList:
 	dc.w	6,6,6,6,6,6,6,6,6,6,6,6
 	dc.w	$ffff
 
-LivelloAttuale:
+; Gestione livelli di gioco
+
+GameLevel:
+    dc.w    0
+
+ActualLevelPtr:
+	dc.l	0
+
+LevelsList:
 	dc.l	Livello1
 
 	EVEN

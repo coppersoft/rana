@@ -226,7 +226,6 @@ HandleTimeStrip:
     bsr.w   KillRana
     rts
 
-
 .nonmuore
 
 	move.l	draw_buffer,a0
@@ -316,6 +315,13 @@ PseudoRandom:
 
 	rts
 
+SetLevel:
+	move.w	GameLevel,d0
+	lea		LevelsList,a0
+	lsl.w	d0
+	add.l	d0,a0
+	move.l	(a0),ActualLevelPtr
+	rts
 
 ; --- DATI 
 
