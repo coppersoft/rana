@@ -316,7 +316,7 @@ CheckForGameOver:
 	lea		Background,a3
 
 	move.w	#88+(background_margin*8),d0
-	move.w	#120,d1
+	move.w	#126,d1
 	move.w	#9,d2
 	move.w	#15,d3
 	move.w	#5,d4
