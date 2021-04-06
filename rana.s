@@ -173,11 +173,14 @@ START:
 
 ; FINE PRESENTAZIONE INIZIALE
 
+; Restart full dopo il gameover
 RestartGame:
     move.w  #3,Lifes
     move.w  #0,GameLevel
+	move.w  #0,Score
+; Restart parziale, dopo il cambio di livello
+NextLevel:
 	bsr.w	SetLevel
-    move.w  #0,Score
 	bsr.w	ResetRana
 	bsr.w	ResetTouchDowns
 
@@ -1639,6 +1642,8 @@ TouchdownAreas:
 	dc.w	291,0
 	dc.w	$ffff
 
+TouchdownCompleted:
+	dc.w	0
 
 DraggingSpeed:
 	dc.w	0
