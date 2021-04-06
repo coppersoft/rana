@@ -183,6 +183,7 @@ NextLevel:
 	bsr.w	SetLevel
 	bsr.w	ResetRana
 	bsr.w	ResetTouchDowns
+	move.w	#4,TouchdownCompleted
 
 InitLevel:
 
@@ -287,6 +288,12 @@ mainloop:
 
 	bsr.w   CheckSoundStop
 
+	bsr.w	CheckForLevelCleared
+	cmpi.w	#5,TouchdownCompleted
+	beq.w	NextLevel
+
+
+
     btst    #6,$bfe001
     bne     mainloop
 
@@ -339,10 +346,42 @@ CheckForGameOver:
 .exit
 	rts
 
-
-
-
 ; -----------------------------
+
+CheckForLevelCleared:
+	cmpi.w	#5,TouchdownCompleted
+	bne.s	.exit
+
+	lea		LevelCleared,a0
+	lea		LevelCleared_mask,a1
+	move.l	draw_buffer_bob,a2
+	lea		Background,a3
+
+	move.w	#64+(background_margin*8),d0
+	move.w	#126,d1
+	move.w	#12,d2
+	move.w	#15,d3
+	move.w	#5,d4
+
+	bsr.w	BlitBob
+
+	bsr.w	SwitchBuffers
+
+	move.w	#200,d7
+
+.wait
+	bsr.w	wframe
+	dbra	d7,.wait
+
+	bsr.w	CopiaSfondo
+
+; TODO: Aggiungere 1 al livello
+
+.exit
+	rts
+
+
+
 
 CheckCollisionWithMosca:
 	cmpi.w	#2,MoscaStatus		; Se si sta visualizzando lo sprite con i 500 punti ovviamente salto
@@ -577,6 +616,8 @@ WaterZoneCollision:
 	bsr.w	ResetRana
 
 	bsr.w	PlayWin
+
+	addq.w	#1,TouchdownCompleted
 
 ; Alla fine, controllo che non si è mangiata pure la mosca
 	bsr.w	CheckCollisionWithMosca
