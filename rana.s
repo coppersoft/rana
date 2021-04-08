@@ -176,7 +176,7 @@ START:
 ; Restart full dopo il gameover
 RestartGame:
     move.w  #3,Lifes
-    move.w  #0,GameLevel
+    move.w  #1,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
 NextLevel:
@@ -1652,6 +1652,8 @@ NormalTurtleFrameList:
 
 Livello1:
 	include	"levels/level1.s"
+Livello2:
+	include "levels/level2.s"
 
 GameLevel:
     dc.w    0
@@ -1661,6 +1663,7 @@ ActualLevelPtr:
 
 LevelsList:
 	dc.l	Livello1
+	dc.l	Livello2
 
 	EVEN
 
