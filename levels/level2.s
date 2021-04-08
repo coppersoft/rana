@@ -114,14 +114,34 @@
 
 ; Riga 1 automobili
 
-	dc.l	FurgoneSx			; Indirizzo bob
-	dc.l	FurgoneSx_mask	; Indirizzo bobmask
+	dc.l	FurgoneDx			; Indirizzo bob
+	dc.l	FurgoneDx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
+	dc.w	2				; Velocità
 	dc.w	320				; x
 	dc.w	160				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
+
+	dc.l	AutoBluDx			; Indirizzo bob
+	dc.l	AutoBluDx_mask	; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	2				; Velocità
+	dc.w	160				; x
+	dc.w	160				; y
+	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	AutoArancioneDx			; Indirizzo bob
+	dc.l	AutoArancioneDx_mask	; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	2				; Velocità
+	dc.w	40				; x
+	dc.w	160				; y
+	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+
 
 ; Riga 2 autobili
 
@@ -136,13 +156,32 @@
 
 ; Riga 3 autobili
 
-	dc.l	FurgoneSx			; Indirizzo bob
-	dc.l	FurgoneSx_mask	; Indirizzo bobmask
+	dc.l	FurgoneDx			; Indirizzo bob
+	dc.l	FurgoneDx_mask	; Indirizzo bobmask
 	dc.w	(48/16)			; Larghezza in word
-	dc.w	-1				; Velocità
+	dc.w	1				; Velocità
 	dc.w	40				; x
 	dc.w	220				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale
+
+	dc.l	AutoBluDx			; Indirizzo bob
+	dc.l	AutoBluDx_mask	; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	140				; x
+	dc.w	220				; y
+	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
+	dc.l	AutoArancioneDx			; Indirizzo bob
+	dc.l	AutoArancioneDx_mask	; Indirizzo bobmask
+	dc.w	(48/16)			; Larghezza in word
+	dc.w	1				; Velocità
+	dc.w	240				; x
+	dc.w	220				; y
+	dc.l	SingleFrameList	; Lista fotogrammi
+	dc.w	0				; Fotogramma attuale
+
 
     dc.l    0

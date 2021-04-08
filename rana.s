@@ -636,6 +636,11 @@ FindAttachedSpeed:
     lea     Directions,a0
     move.w  RanaY,d0
 
+	move.l	#0,d1
+	move.w	GameLevel,d1	; prendo quelle specifiche del livello
+	mulu.w	#18,d1
+	add.l	d1,a0
+
 .loopdir
     move.w  (a0)+,d1    ; Y di controllo in d1
     cmpi.w  #$ffff,d1   ; non dovrebbe mai succedere...
@@ -1670,14 +1675,20 @@ LevelsList:
 	
 
 ; Y rana
-; Direction     (1 left, 2 right)
+; Direction
 Directions:
+; Livello 1
 	dc.w	51,1
 	dc.w	72,-1
 	dc.w	93,1
 	dc.w	114,-1
     dc.w    $ffff
-
+; Livello 2
+	dc.w	51,1
+	dc.w	72,-1
+	dc.w	93,1
+	dc.w	114,-2
+    dc.w    $ffff
 TouchdownAreas:
 	dc.w	11,0
 	dc.w	81,0
