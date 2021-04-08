@@ -318,7 +318,7 @@ PseudoRandom:
 SetLevel:
 	move.w	GameLevel,d0
 	lea		LevelsList,a0
-	lsl.w	d0
+	lsl.w	#2,d0
 	add.l	d0,a0
 	move.l	(a0),ActualLevelPtr
 	rts
