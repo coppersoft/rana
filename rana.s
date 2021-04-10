@@ -85,14 +85,14 @@ START:
 
 ; Inizializzo la routine P61 per la musica
 
-;	movem.l	d0-d7/a0-a6,-(SP)
-;	moveq	#0,d0		; Timer Detection: Autodetect
-;	lea	    Music,a0	; Indirizzo del modulo in a0
-;	lea	    $dff000,a6	; Ricordiamoci il $dff000 in a6!
-;	sub.l	a1,a1		; I samples non sono a parte, mettiamo zero
-;	sub.l	a2,a2		; no samples -> modulo non compattato
-;	bsr.w	P61_Init
-;	movem.l	(SP)+,d0-d7/a0-a6
+	movem.l	d0-d7/a0-a6,-(SP)
+	moveq	#0,d0		; Timer Detection: Autodetect
+	lea	    Music,a0	; Indirizzo del modulo in a0
+	lea	    $dff000,a6	; Ricordiamoci il $dff000 in a6!
+	sub.l	a1,a1		; I samples non sono a parte, mettiamo zero
+	sub.l	a2,a2		; no samples -> modulo non compattato
+	bsr.w	P61_Init
+	movem.l	(SP)+,d0-d7/a0-a6
 
     lea     $dff000,a5
     move.w	#0,$1fc(a5)		    ; Disattiva l'AGA
@@ -297,8 +297,9 @@ mainloop:
     btst    #6,$bfe001
     bne     mainloop
 
+; Mouse premuto, in uscita
 
-;    bsr.w   P61_End
+    bsr.w   P61_End
 
     rts
 ; ===== FINE LOOP PRINCIPALE
@@ -1109,12 +1110,12 @@ INTERRUPT:
                         ; Controllo quindi il bit 5 di INTREQR, se è a 0 salto tutto
 	beq.s	Novertb     
 	
-;	movem.l	d0-d7/a0-a6,-(sp)
+	movem.l	d0-d7/a0-a6,-(sp)
 
-;	lea	    $dff000,a6
-;	bsr.w	P61_Music		
+	lea	    $dff000,a6
+	bsr.w	P61_Music		
 
-;	movem.l	(sp)+,d0-d7/a0-a6
+	movem.l	(sp)+,d0-d7/a0-a6
 
 Novertb:
 	move.w	#%1110000,$dff09c
@@ -1306,6 +1307,9 @@ Silent:
     dcb.w   1024
 SoundStarted:
     dc.w    0
+Music:
+	incbin	"music/P61.greenandslimy-9"
+
 
 
 Lifes:
