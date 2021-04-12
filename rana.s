@@ -376,7 +376,7 @@ CheckForLevelCleared:
 
 	bsr.w	CopiaSfondo
 
-; TODO: Aggiungere 1 al livello
+	addq.w	#1,GameLevel
 
 .exit
 	rts
@@ -1675,6 +1675,7 @@ ActualLevelPtr:
 LevelsList:
 	dc.l	Livello1
 	dc.l	Livello2
+	dc.l	Livello3
 
 	EVEN
 
