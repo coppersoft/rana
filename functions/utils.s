@@ -215,7 +215,8 @@ Fade:
 
 ; -------
 
-framesPerStripPixel=50
+;framesPerStripPixel=50
+framesPerStripPixel=500
 maxStrip=32
 
 HandleTimeStrip:

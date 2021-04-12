@@ -254,9 +254,9 @@ lifeoffset = 16
     move.l  #$ffffffff,$dff044      ; maschera
 
     move.l  a0,$dff054
-    move.w  #(rasterline-6),$dff066     ; Modulo canale D, salto 3 word
+    move.w  #(rasterline-10),$dff066     ; Modulo canale D, salto 3 word
 
-    move.w  #(16*5*64)+3,$dff058        ; BLTSIZE
+    move.w  #(16*5*64)+5,$dff058        ; BLTSIZE
 
 ; Copio il numero di vite
 

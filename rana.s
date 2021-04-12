@@ -175,7 +175,7 @@ START:
 
 ; Restart full dopo il gameover
 RestartGame:
-    move.w  #3,Lifes
+    move.w  #5,Lifes
     move.w  #1,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
@@ -183,7 +183,7 @@ NextLevel:
 	bsr.w	SetLevel
 	bsr.w	ResetRana
 	bsr.w	ResetTouchDowns
-	move.w	#4,TouchdownCompleted
+	move.w	#0,TouchdownCompleted
 
 InitLevel:
 
@@ -1663,6 +1663,8 @@ Livello1:
 	include	"levels/level1.s"
 Livello2:
 	include "levels/level2.s"
+Livello3:
+	include "levels/level3.s"
 
 GameLevel:
     dc.w    0
@@ -1688,6 +1690,12 @@ Directions:
 	dc.w	114,-1
     dc.w    $ffff
 ; Livello 2
+	dc.w	51,1
+	dc.w	72,-1
+	dc.w	93,1
+	dc.w	114,-1
+    dc.w    $ffff
+; Livello 3
 	dc.w	51,1
 	dc.w	72,-1
 	dc.w	93,1
