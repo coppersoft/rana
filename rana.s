@@ -176,14 +176,14 @@ START:
 ; Restart full dopo il gameover
 RestartGame:
     move.w  #5,Lifes
-    move.w  #3,GameLevel
+    move.w  #0,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
 NextLevel:
 	bsr.w	SetLevel
 	bsr.w	ResetRana
 	bsr.w	ResetTouchDowns
-	move.w	#0,TouchdownCompleted
+	move.w	#4,TouchdownCompleted
 
 InitLevel:
 
@@ -372,6 +372,7 @@ CheckForLevelCleared:
 
 .wait
 	bsr.w	wframe
+	bsr.w	HandleMosca
 	dbra	d7,.wait
 
 	bsr.w	CopiaSfondo
