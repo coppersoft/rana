@@ -25,7 +25,7 @@
 	dc.l	Tronco2_mask	; Indirizzo bobmask
 	dc.w	(96/16)			; Larghezza in word
 	dc.w	1				; Velocità
-	dc.w	100				; x
+	dc.w	80				; x
 	dc.w	50				; y
 	dc.l	SingleFrameList	; Lista fotogrammi
 	dc.w	0				; Fotogramma attuale

@@ -176,7 +176,7 @@ START:
 ; Restart full dopo il gameover
 RestartGame:
     move.w  #5,Lifes
-    move.w  #1,GameLevel
+    move.w  #2,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
 NextLevel:
