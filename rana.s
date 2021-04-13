@@ -176,7 +176,7 @@ START:
 ; Restart full dopo il gameover
 RestartGame:
     move.w  #5,Lifes
-    move.w  #2,GameLevel
+    move.w  #3,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
 NextLevel:
@@ -1665,6 +1665,8 @@ Livello2:
 	include "levels/level2.s"
 Livello3:
 	include "levels/level3.s"
+Livello4:
+	include "levels/level4.s"
 
 GameLevel:
     dc.w    0
@@ -1676,6 +1678,7 @@ LevelsList:
 	dc.l	Livello1
 	dc.l	Livello2
 	dc.l	Livello3
+	dc.l	Livello4
 
 	EVEN
 
@@ -1702,6 +1705,13 @@ Directions:
 	dc.w	93,1
 	dc.w	114,-2
     dc.w    $ffff
+; Livello 4
+	dc.w	51,2
+	dc.w	72,-2
+	dc.w	93,1
+	dc.w	114,-1
+    dc.w    $ffff
+
 TouchdownAreas:
 	dc.w	11,0
 	dc.w	81,0
