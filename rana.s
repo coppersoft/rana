@@ -110,8 +110,7 @@ START:
 	; ATTENZIONE!!!
 	; PRIMA copio lo sfondo e punto i bitplane, DOPO faccio puntare la copperlist
 	; onde evitare di visualizzare frame sporchi
-    bsr.w   CopiaSfondo
-	bsr.w	SwitchBuffers
+    bsr.w   CopiaPresentazione
  
     ; Setto la copperlist
 
@@ -127,51 +126,42 @@ START:
 
 ; PRESENTAZIONE INIZIALE
 
-;    lea     Presentazione,a0
-;    move.l  draw_buffer,a1
-;    move.w  #200,d0
-;    move.w  #5,d1
-;    bsr.w   SimpleBlit
+ 
 
-;    lea     Presentazione+(200*44*5),a0
-;    move.l  draw_buffer,a1
-;    add.l   #200*44*5,a1
-;    move.w  #55,d0
-;    move.w  #5,d1
-;    bsr.w   SimpleBlit
+    bsr.w   SwitchBuffers
 
-;    bsr.w   SwitchBuffers
-
-;    move.l  #0,d0
-;.fadein_pres:
-;    lea     PaletteRaw,a0
-;    lea     Palette+2,a1
-;    moveq   #32-1,d1
-;    addi.b  #1,d0
-;    bsr.w   Fade
-;    bsr.w   wframe
-;    bsr.w   wframe
-;    cmpi.b  #16,d0
-;    bne.s   .fadein_pres
+    move.l  #0,d0
+.fadein_pres:
+    lea     PaletteRaw,a0
+    lea     Palette+2,a1
+    moveq   #32-1,d1
+    addi.b  #1,d0
+    bsr.w   Fade
+    bsr.w   wframe
+    bsr.w   wframe
+    cmpi.b  #16,d0
+    bne.s   .fadein_pres
     
-;.pr_loop:
-;    btst    #7,$bfe001
-;    bne.s   .pr_loop
+.pr_loop:
+    btst    #7,$bfe001
+    bne.s   .pr_loop
 
-;	moveq	#16,d0
-;.fadeout_pres:
-;	lea	    PaletteRaw,a0
-;	lea	    Palette+2,a1
-;	moveq	#32-1,d1
-;	subi.b	#1,d0
-;	bsr.w	Fade
-;   bsr.w   wframe
-;   bsr.w   wframe
-;	tst.b	d0
-;	bne.s	.fadeout_pres
+	moveq	#16,d0
+.fadeout_pres:
+	lea	    PaletteRaw,a0
+	lea	    Palette+2,a1
+	moveq	#32-1,d1
+	subi.b	#1,d0
+	bsr.w	Fade
+    bsr.w   wframe
+    bsr.w   wframe
+	tst.b	d0
+	bne.s	.fadeout_pres
 
 
 ; FINE PRESENTAZIONE INIZIALE
+
+	bsr.w	CopiaSfondo
 
 ; Restart full dopo il gameover
 RestartGame:
@@ -1239,6 +1229,10 @@ view_buffer_bob:							; Senza saltare il margine
 	dc.l	Bitplanes1
 draw_buffer_bob:
 	dc.l	Bitplanes2						
+
+; Presentazione, immagine base 320x256
+Presentazione:
+	incbin	"gfx/Splash.raw"
 
 ; Background, immagine base 320x256
 Background_nomargin:

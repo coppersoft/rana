@@ -231,6 +231,26 @@ CopiaSfondo:
     movem.l (SP)+,d0/d1/a0/a1
     rts
 
+; -------------------
+; Copio la presentazione, solo nel draw_buffer, tanto non devo animare
+
+CopiaPresentazione:
+    lea     Presentazione,a0
+    move.l  draw_buffer,a1
+    move.w  #200,d0
+    move.w  #5,d1
+    bsr.w   SimpleBlit
+
+    lea     Presentazione+(200*40*5),a0
+    move.l  draw_buffer,a1
+    add.l   #200*(40+(background_margin*2))*5,a1
+    move.w  #55,d0
+    move.w  #5,d1
+    bsr.w   SimpleBlit
+    rts
+
+; -------------------
+
 ; a0    buffer dove scrivere
 DrawLifes:
 
