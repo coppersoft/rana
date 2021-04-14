@@ -244,7 +244,7 @@ mainloop:
 
 .nofadein:
 
-	bsr.w	HandleTimeStrip
+	bsr.w	HandleTimeStrip		; Si blocca sul 500, controllare
 
 	bsr.w	UpdateBobPositions
     bsr.w	DrawBobs
