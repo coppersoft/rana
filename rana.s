@@ -183,7 +183,7 @@ NextLevel:
 	bsr.w	SetLevel
 	bsr.w	ResetRana
 	bsr.w	ResetTouchDowns
-	move.w	#4,TouchdownCompleted
+	move.w	#0,TouchdownCompleted
 
 InitLevel:
 
@@ -378,6 +378,11 @@ CheckForLevelCleared:
 	bsr.w	CopiaSfondo
 
 	addq.w	#1,GameLevel
+
+; Se ha superato il 4 ricomicio daccapo
+	cmpi.w	#5,GameLevel
+	bne.s	.exit
+	move.w	#0,GameLevel
 
 .exit
 	rts
@@ -1668,6 +1673,8 @@ Livello3:
 	include "levels/level3.s"
 Livello4:
 	include "levels/level4.s"
+Livello5:
+	include "levels/level5.s"
 
 GameLevel:
     dc.w    0
@@ -1680,6 +1687,7 @@ LevelsList:
 	dc.l	Livello2
 	dc.l	Livello3
 	dc.l	Livello4
+	dc.l	Livello5
 
 	EVEN
 
@@ -1711,6 +1719,12 @@ Directions:
 	dc.w	72,-2
 	dc.w	93,1
 	dc.w	114,-1
+    dc.w    $ffff
+; Livello 5
+	dc.w	51,2
+	dc.w	72,-2
+	dc.w	93,1
+	dc.w	114,-2
     dc.w    $ffff
 
 TouchdownAreas:
