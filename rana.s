@@ -168,7 +168,7 @@ START:
 ; Restart full dopo il gameover
 RestartGame:
     move.w  #5,Lifes
-    move.w  #3,GameLevel
+    move.w  #0,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
 NextLevel:
@@ -375,6 +375,7 @@ CheckCollisionWithMosca:
 	move.w	#0,MoscaTimer
 
 	addi.w	#500,Score
+	bsr.w	DrawScore
 
 	lea		MoscaSpritePointer,a0
 	lea		CinquecentoPuntiSprite,a1
