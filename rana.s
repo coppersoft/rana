@@ -302,10 +302,10 @@ CheckForGameOver:
 	lea		Background,a3
 
 	move.w	#88+(background_margin*8),d0
-	move.w	#126,d1
-	move.w	#9,d2
-	move.w	#15,d3
-	move.w	#5,d4
+	moveq	#126,d1
+	moveq	#9,d2
+	moveq	#15,d3
+	moveq	#5,d4
 
 	bsr.w	BlitBob
 
@@ -334,10 +334,10 @@ CheckForLevelCleared:
 	lea		Background,a3
 
 	move.w	#64+(background_margin*8),d0
-	move.w	#126,d1
-	move.w	#12,d2
-	move.w	#15,d3
-	move.w	#5,d4
+	moveq	#126,d1
+	moveq	#12,d2
+	moveq	#15,d3
+	moveq	#5,d4
 
 	bsr.w	BlitBob
 
@@ -434,7 +434,7 @@ HandleMosca:
     move.w  d0,2(a0)		; Punto lo sprite nella copperlist
 
 	move.l	#0,d0
-    move.w  #32,d0			; Y in d0
+    moveq   #32,d0			; Y in d0
 
 	lsl.w	#2,d7			; Moltiplico per quattro il numero casuale
 	add.w	d7,a2			; E lo uso come offset per prendere la X dell'area touchdown
@@ -443,7 +443,7 @@ HandleMosca:
 
 	addq.w	#3,d1			; lo centro
 
-    move.w  #9,d2			; Altezza in d2
+    moveq   #9,d2			; Altezza in d2
 
 ; Me li salvo eventualmente per muovere lo sprite 500 punti
 	move.w	d1,CinquecentoPuntiX
@@ -476,7 +476,7 @@ HandleMosca:
 	move.w	CinquecentoPuntiY,d0
 	sub.w	d5,d0
 	move.w	CinquecentoPuntiX,d1
-	move.w	#9,d2
+	moveq	#9,d2
 	bsr.w	PointSprite
 
 .aumenta
@@ -584,9 +584,9 @@ WaterZoneCollision:
 	lea		Background,a3
 
 	move.w	#touchdown_y,d1
-	move.w	#2,d2
-	move.w	#16,d3
-	move.w	#5,d4
+	moveq	#2,d2
+	moveq	#16,d3
+	moveq	#5,d4
 	bsr.w	BlitBob
 
 	move.l	view_buffer_bob,a2
@@ -748,7 +748,7 @@ ShowExplosionFrame:
     move.w  d3,2(a0)		; Punto lo sprite nella copperlist
 	
 	add.w	#16,d1
-	move.w	#32,d2
+	moveq	#32,d2
 	bsr.w	PointSprite
 
 	rts
@@ -814,8 +814,8 @@ DrawBobs:
 
 ; fine gestione fotogrammi
 
-	move.w	#16,d3
-	move.w	#5,d4
+	moveq	#16,d3
+	moveq	#5,d4
 	bsr.w	BlitBob
 
 	bra.s	.levelLoop
@@ -845,7 +845,7 @@ UpdateBobPositions:
 .nosx_marg
 	cmpi.w	#320+(background_margin*8),d1		; E' oltre il margine destro?
 	blt.s	.done		; Se no salto
-	move.w	#0,d1		; Se si lo riporto al margine sinistro
+	moveq	#0,d1		; Se si lo riporto al margine sinistro
 .done
 	move.w	d1,(a0)+
 
@@ -968,10 +968,10 @@ UpdateRanaPosition:
 	cmpi.w	#1,RanaOrientation		; In che verso sta saltando?
 	bgt.s	.orizzontale
 									; Verticalmente
-	move.w	#jump_length_vert,d0
+	moveq	#jump_length_vert,d0
 	bra.s	.finecontrollo
 .orizzontale
-	move.w	#jump_length_horiz,d0
+	moveq	#jump_length_horiz,d0
 
 .finecontrollo
 

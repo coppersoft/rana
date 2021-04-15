@@ -31,7 +31,7 @@ BoundaryCheck:
     move.w  #1,d0
     rts
 .nocoll
-    move.w  #0,d0
+    moveq   #0,d0
     rts
 ; --------------
 
@@ -163,7 +163,7 @@ DrawScore:
     mulu.w  #7*5,d0             ; Moltiplico per l'altezza del font * 5 bitplane
     add.l   d0,a3               ; Trovo la posizione iniziale della cifra
 
-    move.w  #(7*5)-1,d1         ; 7 byte * 5 bitplane da copiare
+    moveq   #(7*5)-1,d1         ; 7 byte * 5 bitplane da copiare
 .drawsingledigitloop:
 
     move.b  (a3),(a1)

@@ -190,42 +190,42 @@ CopiaSfondo:
     lea     Background_nomargin,a0
     move.l  draw_buffer,a1
     move.w  #200,d0
-    move.w  #5,d1
+    moveq   #5,d1
     bsr.w   SimpleBlit
     
     lea     Background_nomargin,a0
     move.l  view_buffer,a1
     move.w  #200,d0
-    move.w  #5,d1
+    moveq   #5,d1
     bsr.w   SimpleBlit
 
     lea     Background_nomargin,a0
     lea     Background,a1
     add.l   #background_margin,a1                   ; Per il background mi sposto in avanti del margine
     move.w  #200,d0
-    move.w  #5,d1
+    moveq   #5,d1
     bsr.w   SimpleBlit
 
     lea     Background_nomargin+(200*40*5),a0
     move.l  draw_buffer,a1
     add.l   #200*(40+(background_margin*2))*5,a1
-    move.w  #55,d0
-    move.w  #5,d1
+    moveq   #55,d0
+    moveq   #5,d1
     bsr.w   SimpleBlit
     
     lea     Background_nomargin+(200*40*5),a0
     move.l  view_buffer,a1
     add.l   #200*(40+(background_margin*2))*5,a1
-    move.w  #55,d0
-    move.w  #5,d1
+    moveq   #55,d0
+    moveq   #5,d1
     bsr.w   SimpleBlit
 
     lea     Background_nomargin+(200*40*5),a0
     lea     Background,a1
     add.l   #background_margin,a1                   ; Per il background mi sposto in avanti del margine
     add.l   #200*(40+(background_margin*2))*5,a1
-    move.w  #55,d0
-    move.w  #5,d1
+    moveq   #55,d0
+    moveq   #5,d1
     bsr.w   SimpleBlit
 
     movem.l (SP)+,d0/d1/a0/a1
@@ -238,14 +238,14 @@ CopiaPresentazione:
     lea     Presentazione,a0
     move.l  draw_buffer,a1
     move.w  #200,d0
-    move.w  #5,d1
+    moveq   #5,d1
     bsr.w   SimpleBlit
 
     lea     Presentazione+(200*40*5),a0
     move.l  draw_buffer,a1
     add.l   #200*(40+(background_margin*2))*5,a1
-    move.w  #55,d0
-    move.w  #5,d1
+    moveq   #55,d0
+    moveq   #5,d1
     bsr.w   SimpleBlit
     rts
 
@@ -286,7 +286,7 @@ lifeoffset = 16
     beq.s   .nessunavita
 
     subq.w  #1,d0
-    move.w  #0,d1                ; Byte di spostamento a destra per ogni vita da visualizzare
+    moveq   #0,d1                ; Byte di spostamento a destra per ogni vita da visualizzare
 .lifesloop
 
     tst     $dff002

@@ -54,7 +54,7 @@ CheckSoundStop:
 
     lea     Silent,a0
     move.l  a0,$dff0d0
-    move.w  #1024,$dff0d4  ; Lunghezza in word in AUD2LEN
+    move.w  #16,$dff0d4  ; Lunghezza in word in AUD2LEN
 
     move.w  #0,SoundStarted
 
