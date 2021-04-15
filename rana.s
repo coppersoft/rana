@@ -168,7 +168,7 @@ START:
 ; Restart full dopo il gameover
 RestartGame:
     move.w  #5,Lifes
-    move.w  #0,GameLevel
+    move.w  #3,GameLevel
 	move.w  #0,Score
 ; Restart parziale, dopo il cambio di livello
 NextLevel:
@@ -485,6 +485,10 @@ HandleMosca:
 CheckCollisions:
 ; Prima di tutto controllo in che "zona" si trova la rana, se è nella zona inferiore, quella con le auto,
 ; qualsiasi collisione è mortale
+
+	cmpi.w	#ranaY_start,RanaY
+	beq.s	.exit
+
 	cmpi.w	#car_zone_y_margin,RanaY
 	bge.s	.carzone
 	bsr.w	WaterZoneCollision
@@ -492,6 +496,8 @@ CheckCollisions:
 
 .carzone:
 	bsr.w	CarZoneCollision
+
+.exit
 	rts
 
 
