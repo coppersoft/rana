@@ -224,9 +224,6 @@ mainloop:
 
 .nofadein:
 
-
-
-
 	bsr.w	HandleTimeStrip
 
 
@@ -1078,10 +1075,10 @@ WaitRaster:
 wframe:
 	btst #0,$dff005
 	bne.b wframe
-	cmp.b #$2a,$dff006      ; Spostato da 2a a c1 per dare aria al blitter
+	cmp.b #$c1,$dff006      ; Spostato da 2a a c1 per dare aria al blitter
 	bne.b wframe
 wframe2:
-	cmp.b #$2a,$dff006
+	cmp.b #$c1,$dff006
 	beq.b wframe2
     rts
 
