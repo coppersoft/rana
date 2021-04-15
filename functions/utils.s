@@ -215,11 +215,29 @@ Fade:
 
 ; -------
 
+
+; ----------
+
+TestLoop:
+	moveq	#0,d0	
+.cloop
+	addq.w	#1,d0
+	move.w	d0,$dff180
+	
+	btst    #6,$bfe001
+    bne     .cloop
+	rts
+; ----------
+
+
+
 framesPerStripPixel=50
 ;framesPerStripPixel=500
 maxStrip=32
 
 HandleTimeStrip:
+
+
 
     cmpi.w  #maxStrip,TimeStripCounter
     bne.s   .nonmuore
@@ -232,6 +250,7 @@ HandleTimeStrip:
 	move.l	draw_buffer,a0
 	add.l	#time_strip_start,a0
 
+
     lea     TimeStrip,a1
 
     move.l  #0,d0
@@ -239,6 +258,8 @@ HandleTimeStrip:
     move.w  TimeStripCounter,d0
     lsl.w   #2,d0
     add.w   d0,a1
+
+
 
 ; Prima riga
 	move.l	(a1),(a0)
@@ -250,6 +271,9 @@ HandleTimeStrip:
 	move.l	(a1),(a0)
 	add.l	#(20+40),a0
 	move.l	(a1),(a0)
+
+
+
 
 ; Seconda riga
 	add.l	#(20+40),a0

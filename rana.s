@@ -35,10 +35,11 @@
 
 background_margin = 10       ; Margine in byte, sia sinistro che destro
 
+jump_length_horiz = 16
 ranaX_start = jump_length_horiz*6
 ranaY_start	= 240
 jump_length_vert = 21
-jump_length_horiz = 16
+
 
 ; Margini Y
 car_zone_y_margin=240-(7*16)
@@ -46,7 +47,7 @@ touchdown_y=30
 
 rasterline=((background_margin*2)+40)
 
-time_strip_start=((rasterline*5)*11)+35		; Posizione di inizio della striscia tempo residuo
+time_strip_start=((rasterline*5)*11)+34		; Posizione di inizio della striscia tempo residuo
 
 mosca_wait_time = 50*5		; Fotogrammi prima che appaia/scompaia una mosca in uno dei traguardi
 punti_view_time = 64		; Fotogrammi in cui viene visualizzato lo sprite con i 500 punti
@@ -162,6 +163,7 @@ START:
 ; FINE PRESENTAZIONE INIZIALE
 
 	bsr.w	CopiaSfondo
+	bsr.w	SwitchBuffers
 
 ; Restart full dopo il gameover
 RestartGame:
@@ -201,31 +203,9 @@ InitLevel:
 	; errata, lo leggo una volta a vuoto.
 	move.w  $dff00e,d3
 
+
+
 	bsr.w	ShowLifes
-
-
-; Prova mosca
-;	lea     MoscaSpritePointer,a0
-;	lea		MoscaSprite,a1
-;    move.l  a1,d0
-
-;    move.w  d0,6(a0)
-;    swap    d0
-;    move.w  d0,2(a0)		; Punto lo sprite nella copperlist
-
-; a1    Indirizzo dello sprite
-; d0    Posizione verticale
-; d1    Posizione orizzontale
-; d2    Altezza
-;	lea		MoscaSprite,a1
-;	move.w	#32,d0			; y
-;	move.w	#11+3,d1			; x
-;	move.w	#9,d2
-;	bsr.w	PointSprite
-
-; Fine prova mosca
-
-
 
 
 mainloop:
@@ -244,7 +224,12 @@ mainloop:
 
 .nofadein:
 
-	bsr.w	HandleTimeStrip		; Si blocca sul 500, controllare
+
+
+
+	bsr.w	HandleTimeStrip
+
+
 
 	bsr.w	UpdateBobPositions
     bsr.w	DrawBobs
@@ -1225,6 +1210,7 @@ view_buffer:
 draw_buffer:
 	dc.l	Bitplanes2+background_margin	; buffer di disegno
 
+
 view_buffer_bob:							; Senza saltare il margine
 	dc.l	Bitplanes1
 draw_buffer_bob:
@@ -1606,7 +1592,7 @@ Turtle:
 	incbin	"gfx/Turtle5.raw"
 	incbin	"gfx/Turtle6.raw"
 	incbin	"gfx/Turtle_m2.raw"
-	incbin	"gfx/Turtle_m3.raw
+	incbin	"gfx/Turtle_m3.raw"
 
 Turtle_mask:
 	incbin	"gfx/Turtle1_mask.raw"
@@ -1616,7 +1602,7 @@ Turtle_mask:
 	incbin	"gfx/Turtle5_mask.raw"
 	incbin	"gfx/Turtle6_mask.raw"
 	incbin	"gfx/Turtle_m2_mask.raw"
-	incbin	"gfx/Turtle_m3_mask.raw
+	incbin	"gfx/Turtle_m3_mask.raw"
 
 ; Fotogrammi bob
 SingleFrameList:
