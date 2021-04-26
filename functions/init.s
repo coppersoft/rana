@@ -3,6 +3,13 @@
 ; ====== BLOCCO DEL SISTEMA OPERATIVO E DEGLI INTERRUPT
 
 init:
+
+    move.w  #70,d0
+.waitdisk
+    bsr.w   wframe
+    dbra    d0,.waitdisk
+
+
     ; Dobbiamo salvare la copperlist del sistema operativo, ma lo facciamo con una chiamata alla graphics.library
     ; Per aprire una library scrivo
 
