@@ -439,7 +439,7 @@ HandleMosca:
 
 	move.w	(a2),d1			; X in d1
 
-	addq.w	#3,d1			; lo centro
+	addq.w	#1,d1			; lo centro
 
     moveq   #9,d2			; Altezza in d2
 
@@ -569,7 +569,7 @@ WaterZoneCollision:
 	bpl.b	.positivo
 	neg.w	d0
 .positivo
-	cmp.w	#4,d0
+	cmp.w	#3,d0			; Da 4 a 3
 	ble.s	.found
 ;	addq.w	#2,a0			; 4 perché ora ci ho messo pure il segnaposto della vittoria
 	addq.w	#4,a0
@@ -578,7 +578,7 @@ WaterZoneCollision:
 .found
 	move.w	(a0)+,d0		; X da popolare con la rana in d0
 	move.w	#1,(a0)			; Segno che quel posto è stato già vinto
-	addi.w	#81,d0
+	addi.w	#79,d0
 
 ; in entrambi i buffer
 
@@ -1712,11 +1712,11 @@ Directions:
     dc.w    $ffff
 
 TouchdownAreas:
-	dc.w	11,0
-	dc.w	81,0
-	dc.w	151,0
-	dc.w	221,0
-	dc.w	291,0
+	dc.w	13,0
+	dc.w	83,0
+	dc.w	153,0
+	dc.w	223,0
+	dc.w	293,0
 	dc.w	$ffff
 
 TouchdownCompleted:
